@@ -46,7 +46,9 @@ namespace Yow.CoD.Finance.Domain.Model
 
         public void Create(CreateLoanCommand command)
         {
-            //TODO: Check if command is valid (first command. structure is valid)
+            //TODO: If Version > 0 throw
+            //TODO: If command.Amount > 2000 throw
+            //TODO: If command.Term > 2yrs throw
 
             AddEvent(new LoanCreatedEvent(command.CreatedOn, command.Amount, command.Term, command.PaymentPlan));
             AddEvent(new LoanCustomerContactChangedEvent(command.CustomerContact.Name, command.CustomerContact.PreferredPhoneNumber, command.CustomerContact.AlternatePhoneNumber, command.CustomerContact.PostalAddress));

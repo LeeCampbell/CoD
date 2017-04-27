@@ -44,9 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\CreateLoanCommandFixture.cs" />
     <Compile Include="CreatingALoan.cs" />
     <Compile Include="DisbursingFunds.cs" />
     <Compile Include="FakeRepository.cs" />
+    <Compile Include="Contracts\BankAccountFixture.cs" />
+    <Compile Include="Contracts\CustomerContactFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specification.cs" />
     <Compile Include="TakingPayment.cs" />
