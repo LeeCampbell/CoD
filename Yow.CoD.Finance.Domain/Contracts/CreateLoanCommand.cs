@@ -5,13 +5,12 @@ namespace Yow.CoD.Finance.Domain.Contracts
     public class CreateLoanCommand : Command
     {
         public CreateLoanCommand(Guid commandId, 
-            Guid loanId,
+            Guid aggregateId,
             DateTimeOffset createdOn,
             CustomerContact customerContact, 
             BankAccount bankAccount, PaymentPlan paymentPlan, decimal amount, Duration term) 
-            : base(commandId)
+            : base(commandId, aggregateId)
         {
-            LoanId = loanId;
             CustomerContact = customerContact;
             BankAccount = bankAccount;
             PaymentPlan = paymentPlan;
@@ -20,7 +19,6 @@ namespace Yow.CoD.Finance.Domain.Contracts
             CreatedOn = createdOn;
         }
 
-        public Guid LoanId { get; }
         public DateTimeOffset CreatedOn { get; }
 
         public CustomerContact CustomerContact { get; }
@@ -30,6 +28,7 @@ namespace Yow.CoD.Finance.Domain.Contracts
         public PaymentPlan PaymentPlan { get; }
 
         public decimal Amount { get; }
+
         public Duration Term { get; }
     }
 }
