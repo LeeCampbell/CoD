@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Yow.CoD.Finance.WebHost")]
+[assembly: AssemblyTitle("Yow.CoD.Finance.NancyWebHost")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Yow.CoD.Finance.WebHost")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("Yow.CoD.Finance.NancyWebHost")]
+[assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("473b9a7f-9cee-4b36-be05-3e7b2ece72f9")]
+[assembly: Guid("f5a1ef9b-f09f-4091-8696-dd47e042528b")]
 
 // Version information for an assembly consists of the following four values:
 //

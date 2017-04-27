@@ -9,7 +9,7 @@ using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
 using Yow.CoD.Finance.Domain.Services;
 
-namespace Yow.CoD.Finance.WebHost
+namespace Yow.CoD.Finance.NancyWebHost.Adapters
 {
     public class SqlStreamStoreRepository : IRepository<Loan>
     {
