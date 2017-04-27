@@ -15,7 +15,7 @@ namespace Yow.CoD.Finance.Domain.Services
 
         public async Task Handle(TakePaymentCommand command)
         {
-            var loan = await _repository.Get(command.LoanId);
+            var loan = await _repository.Get(command.AggregateId);
             loan.TakePayment(command);
             await _repository.Save(loan);
         }

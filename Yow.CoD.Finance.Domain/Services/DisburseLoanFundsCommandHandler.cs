@@ -4,19 +4,19 @@ using Yow.CoD.Finance.Domain.Model;
 
 namespace Yow.CoD.Finance.Domain.Services
 {
-    public class CreateLoanCommandHandler : IHandler<CreateLoanCommand>
+    public class DisburseLoanFundsCommandHandler : IHandler<DisburseLoanFundsCommand>
     {
         private readonly IRepository<Loan> _repository;
 
-        public CreateLoanCommandHandler(IRepository<Loan> repository)
+        public DisburseLoanFundsCommandHandler(IRepository<Loan> repository)
         {
             _repository = repository;
         }
 
-        public async Task Handle(CreateLoanCommand command)
+        public async Task Handle(DisburseLoanFundsCommand command)
         {
             var loan = await _repository.Get(command.AggregateId);
-            loan.Create(command);
+            loan.DisburseFunds(command);
             await _repository.Save(loan);
         }
     }

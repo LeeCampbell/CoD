@@ -17,7 +17,7 @@ namespace Yow.CoD.Finance.Domain.Tests
             var bankAccount = new BankAccount("066-000", "12345678");
             _command = new CreateLoanCommand(
                 commandId: Guid.NewGuid(),
-                loanId: Guid.NewGuid(),
+                aggregateId: Guid.NewGuid(),
                 createdOn: new DateTimeOffset(2001, 2, 3, 4, 5, 6, TimeSpan.Zero),
                 customerContact: customerContact,
                 bankAccount: bankAccount,

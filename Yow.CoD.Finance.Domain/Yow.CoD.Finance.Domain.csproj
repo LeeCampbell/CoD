@@ -43,7 +43,7 @@
     <Compile Include="Contracts\BankAccount.cs" />
     <Compile Include="Contracts\Command.cs" />
     <Compile Include="Contracts\CustomerContact.cs" />
-    <Compile Include="Contracts\DisburseFundsCommand.cs" />
+    <Compile Include="Contracts\DisburseLoanFundsCommand.cs" />
     <Compile Include="Contracts\CreateLoanCommand.cs" />
     <Compile Include="Contracts\Duration.cs" />
     <Compile Include="Contracts\DurationUnit.cs" />
@@ -53,7 +53,10 @@
     <Compile Include="Contracts\LoanContract.cs" />
     <Compile Include="Contracts\LoanCreatedEvent.cs" />
     <Compile Include="Contracts\LoanCustomerContactChangedEvent.cs" />
+    <Compile Include="Contracts\LoanDisbursedFundsEvent.cs" />
+    <Compile Include="Contracts\LoanSettledEvent.cs" />
     <Compile Include="Contracts\PaymentPlan.cs" />
+    <Compile Include="Contracts\PaymentTakenEvent.cs" />
     <Compile Include="Contracts\TakePaymentCommand.cs" />
     <Compile Include="Model\AggregateRoot.cs" />
     <Compile Include="Model\BankAccount.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="Model\Loan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CreateLoanCommandHandler.cs" />
+    <Compile Include="Services\DisburseLoanFundsCommandHandler.cs" />
     <Compile Include="Services\IHandler.cs" />
     <Compile Include="Services\IRepository.cs" />
     <Compile Include="Services\TakePaymentCommandHandler.cs" />
