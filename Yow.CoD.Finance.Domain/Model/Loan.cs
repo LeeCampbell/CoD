@@ -10,22 +10,6 @@ namespace Yow.CoD.Finance.Domain.Model
 
     public class Loan : AggregateRoot
     {
-
-        //CustomerContact
-        //Banking
-        //Contract
-        //  DateSigned, Approved, DocumentId
-        //  Payment Plan
-        //  Fee model
-        //Account
-        //  Balance
-        //  Due
-        //  State
-        //  Transactions (?) else just read model
-        //      Effective Disbursement Date
-
-
-
         private CustomerContact _customerContact;
         private BankAccount _bankAccount;
         private DateTimeOffset _createdOn;
@@ -42,11 +26,13 @@ namespace Yow.CoD.Finance.Domain.Model
             RegisterHandler<LoanBankAccountChangedEvent>(Handle);
             RegisterHandler<PaymentTakenEvent>(Handle);
             RegisterHandler<LoanSettledEvent>(Handle);
+            RegisterHandler<LoanOverPaidEvent>(Handle);
         }
 
         public void Create(CreateLoanCommand command)
         {
             //TODO: If Version > 0 throw
+            if(Version>0) throw new InvalidOperationException("Loan already created.");
             //TODO: If command.Amount > 2000 throw
             //TODO: If command.Term > 2yrs throw
 
@@ -72,17 +58,17 @@ namespace Yow.CoD.Finance.Domain.Model
             //Check if Command is valid (settled, duplicate command)
             if (command.TransactionDateTime < _createdOn)
                 throw new ArgumentException("Transaction date can not be prior to loan creation", nameof(command));
-            if(command.Amount <= decimal.Zero)
+            if (command.Amount <= decimal.Zero)
                 throw new ArgumentException("Transaction amount must be positive", nameof(command));
 
             //Raise Payment Taken Event
             AddEvent(new PaymentTakenEvent(command.TransactionDateTime, command.Amount));
             //If affects payment schedule
             //  raise payment schedule change event
-            if(_balance>=decimal.Zero)
+            if (_balance >= decimal.Zero)
                 AddEvent(new LoanSettledEvent(command.TransactionDateTime));
-            //If over paid
-            //  raise overpaid event
+            if (_balance > decimal.Zero)
+                AddEvent(new LoanOverPaidEvent(command.TransactionDateTime, _balance));
         }
 
         //public void ReversePayment(ReversePaymentCommand command)
@@ -122,6 +108,7 @@ namespace Yow.CoD.Finance.Domain.Model
 
         private void Handle(LoanDisbursedFundsEvent e)
         {
+            _disbursedOn = e.TransactionDate;
             _balance += e.Amount;
         }
 
@@ -131,7 +118,7 @@ namespace Yow.CoD.Finance.Domain.Model
                 e.CustomerContact.Name,
                 e.CustomerContact.PreferredPhoneNumber,
                 e.CustomerContact.AlternatePhoneNumber,
-                e.CustomerContact.PostalAddress); 
+                e.CustomerContact.PostalAddress);
         }
         private void Handle(LoanBankAccountChangedEvent e)
         {
@@ -146,7 +133,8 @@ namespace Yow.CoD.Finance.Domain.Model
         private void Handle(LoanSettledEvent e)
         {
         }
-
-
+        private void Handle(LoanOverPaidEvent e)
+        {
+        }
     }
 }

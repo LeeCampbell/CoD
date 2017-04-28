@@ -69,4 +69,39 @@ namespace Yow.CoD.Finance.Domain.Tests
             Assert.That(actual.BankAccount.AccountNumber, Is.EqualTo(_command.BankAccount.AccountNumber));
         }
     }
+
+    public class CreatingALoanMutlipleTimes : Specification<Loan, CreateLoanCommand>
+    {
+        protected override IEnumerable<Event> Given()
+        {
+            yield return new LoanCreatedEvent(new DateTime(2000, 01, 01), 2000m, new Duration(12, DurationUnit.Month), PaymentPlan.Weekly);
+        }
+
+        protected override CreateLoanCommand When()
+        {
+            var customerContact = new CustomerContact("Jane Doe", "0412341234", "0856785678", "10 St Georges Terrace, Perth, WA 6000");
+            var bankAccount = new BankAccount("066-000", "12345678");
+            return new CreateLoanCommand(
+                commandId: Guid.NewGuid(),
+                aggregateId: Sut.Id,
+                createdOn: new DateTimeOffset(2001, 2, 3, 4, 5, 6, TimeSpan.Zero),
+                customerContact: customerContact,
+                bankAccount: bankAccount,
+                paymentPlan: PaymentPlan.Weekly,
+                amount: 1000,
+                term: new Duration(12, DurationUnit.Month));
+        }
+
+        protected override IHandler<CreateLoanCommand> CreateHandler()
+        {
+            return new CreateLoanCommandHandler(Repository);
+        }
+
+        [Test]
+        public void Throws()
+        {
+            Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
+                .And.Message.EqualTo("Loan already created."));
+        }
+    }
 }

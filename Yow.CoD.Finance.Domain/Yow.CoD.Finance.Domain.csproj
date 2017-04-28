@@ -54,6 +54,7 @@
     <Compile Include="Contracts\LoanCreatedEvent.cs" />
     <Compile Include="Contracts\LoanCustomerContactChangedEvent.cs" />
     <Compile Include="Contracts\LoanDisbursedFundsEvent.cs" />
+    <Compile Include="Contracts\LoanOverPaidEvent.cs" />
     <Compile Include="Contracts\LoanSettledEvent.cs" />
     <Compile Include="Contracts\PaymentPlan.cs" />
     <Compile Include="Contracts\PaymentTakenEvent.cs" />
