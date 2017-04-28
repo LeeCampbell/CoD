@@ -83,6 +83,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\InMemoryRepository.cs" />
+    <Compile Include="Adapters\LoggingHandler.cs" />
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\CreateLoanModel.cs" />
     <Compile Include="LoanModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
