@@ -58,7 +58,9 @@
     <Compile Include="Contracts\LoanSettledEvent.cs" />
     <Compile Include="Contracts\PaymentPlan.cs" />
     <Compile Include="Contracts\PaymentTakenEvent.cs" />
+    <Compile Include="Contracts\Receipt.cs" />
     <Compile Include="Contracts\TakePaymentCommand.cs" />
+    <Compile Include="Contracts\TransactionReceipt.cs" />
     <Compile Include="Model\AggregateRoot.cs" />
     <Compile Include="Model\BankAccount.cs" />
     <Compile Include="Model\CustomerContact.cs" />

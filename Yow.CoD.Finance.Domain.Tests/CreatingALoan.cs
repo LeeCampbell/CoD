@@ -7,7 +7,7 @@ using Yow.CoD.Finance.Domain.Services;
 
 namespace Yow.CoD.Finance.Domain.Tests
 {
-    public class CreatingALoan : Specification<Loan, CreateLoanCommand>
+    public class CreatingALoan : Specification<Loan, CreateLoanCommand, Receipt>
     {
         private readonly CreateLoanCommand _command;
 
@@ -36,7 +36,7 @@ namespace Yow.CoD.Finance.Domain.Tests
             return _command;
         }
 
-        protected override IHandler<CreateLoanCommand> CreateHandler()
+        protected override IHandler<CreateLoanCommand, Receipt> CreateHandler()
         {
             return new CreateLoanCommandHandler(Repository);
         }
@@ -70,7 +70,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         }
     }
 
-    public class CreatingALoanMutlipleTimes : Specification<Loan, CreateLoanCommand>
+    public class CreatingALoanMutlipleTimes : Specification<Loan, CreateLoanCommand, Receipt>
     {
         protected override IEnumerable<Event> Given()
         {
@@ -92,7 +92,7 @@ namespace Yow.CoD.Finance.Domain.Tests
                 term: new Duration(12, DurationUnit.Month));
         }
 
-        protected override IHandler<CreateLoanCommand> CreateHandler()
+        protected override IHandler<CreateLoanCommand, Receipt> CreateHandler()
         {
             return new CreateLoanCommandHandler(Repository);
         }
@@ -102,6 +102,124 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
             Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
                 .And.Message.EqualTo("Loan already created."));
+        }
+    }
+
+    public abstract class CreatingALoanWithInvalidAmounts : Specification<Loan, CreateLoanCommand, Receipt>
+    {
+        private readonly decimal _amount;
+        private readonly string _expectedError;
+
+        public CreatingALoanWithInvalidAmounts(decimal amount, string expectedError)
+        {
+            _amount = amount;
+            _expectedError = expectedError;
+        }
+
+        protected override IEnumerable<Event> Given()
+        {
+            yield break;
+        }
+
+        protected override CreateLoanCommand When()
+        {
+            var customerContact = new CustomerContact("Jane Doe", "0412341234", "0856785678", "10 St Georges Terrace, Perth, WA 6000");
+            var bankAccount = new BankAccount("066-000", "12345678");
+            return new CreateLoanCommand(
+                commandId: Guid.NewGuid(),
+                aggregateId: Sut.Id,
+                createdOn: new DateTimeOffset(2001, 2, 3, 4, 5, 6, TimeSpan.Zero),
+                customerContact: customerContact,
+                bankAccount: bankAccount,
+                paymentPlan: PaymentPlan.Weekly,
+                amount: _amount,
+                term: new Duration(12, DurationUnit.Month));
+        }
+
+        protected override IHandler<CreateLoanCommand, Receipt> CreateHandler()
+        {
+            return new CreateLoanCommandHandler(Repository);
+        }
+
+        [Test]
+        public void Throws()
+        {
+            Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
+                .And.Message.EqualTo(_expectedError));
+        }
+    }
+
+    public sealed class CreatingALoanOver2000Dollars : CreatingALoanWithInvalidAmounts
+    {
+        public CreatingALoanOver2000Dollars()
+            : base(2001, "Only loan amounts between $50.00 and $2000.00 are supported.")
+        {   
+        }
+    }
+    public sealed class CreatingALoanUnder50Dollars : CreatingALoanWithInvalidAmounts
+    {
+        public CreatingALoanUnder50Dollars()
+            : base(49, "Only loan amounts between $50.00 and $2000.00 are supported.")
+        {
+        }
+    }
+
+    public abstract class CreatingALoanWithInvalidTerm : Specification<Loan, CreateLoanCommand, Receipt>
+    {
+        private readonly Duration _term;
+        private readonly string _expectedError;
+
+        public CreatingALoanWithInvalidTerm(Duration term, string expectedError)
+        {
+            _term = term;
+            _expectedError = expectedError;
+        }
+
+        protected override IEnumerable<Event> Given()
+        {
+            yield break;
+        }
+
+        protected override CreateLoanCommand When()
+        {
+            var customerContact = new CustomerContact("Jane Doe", "0412341234", "0856785678", "10 St Georges Terrace, Perth, WA 6000");
+            var bankAccount = new BankAccount("066-000", "12345678");
+            return new CreateLoanCommand(
+                commandId: Guid.NewGuid(),
+                aggregateId: Sut.Id,
+                createdOn: new DateTimeOffset(2001, 2, 3, 4, 5, 6, TimeSpan.Zero),
+                customerContact: customerContact,
+                bankAccount: bankAccount,
+                paymentPlan: PaymentPlan.Weekly,
+                amount: 1500,
+                term: _term);
+        }
+
+        protected override IHandler<CreateLoanCommand, Receipt> CreateHandler()
+        {
+            return new CreateLoanCommandHandler(Repository);
+        }
+
+        [Test]
+        public void Throws()
+        {
+            Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
+                .And.Message.EqualTo(_expectedError));
+        }
+    }
+
+    public sealed class CreatingALoanOver24Months : CreatingALoanWithInvalidTerm
+    {
+        public CreatingALoanOver24Months()
+            : base(new Duration(25, DurationUnit.Month), "Only loan terms up to 2 years are supported.")
+        {
+        }
+    }
+    public sealed class CreatingALoanOver104Weeks : CreatingALoanWithInvalidTerm
+    {
+        public CreatingALoanOver104Weeks()
+            : base(new Duration(105, DurationUnit.Week), "Only loan terms up to 2 years are supported.")
+        {
         }
     }
 }

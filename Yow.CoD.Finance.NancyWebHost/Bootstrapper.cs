@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Nancy;
+﻿using Nancy;
 using Nancy.TinyIoc;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
@@ -21,7 +18,11 @@ namespace Yow.CoD.Finance.NancyWebHost
             //  Nothing else should really be aware of the IoC/DI strategy.
             var loanRepo = new InMemoryRepository<Loan>();
             container.Register<IRepository<Loan>>(loanRepo);
-            container.Register<IHandler<CreateLoanCommand>>((c, _) => new LoggingHandler<CreateLoanCommand>(c.Resolve<CreateLoanCommandHandler>()));
+
+            container.Register<IHandler<CreateLoanCommand, Receipt>>(
+                (c, _) => new LoggingHandler<CreateLoanCommand, Receipt>(container.Resolve<CreateLoanCommandHandler>()));
+            container.Register<IHandler<TakePaymentCommand, TransactionReceipt>>(
+                (c, _) => new LoggingHandler<TakePaymentCommand, TransactionReceipt>(c.Resolve<TakePaymentCommandHandler>()));
         }
     }
 }

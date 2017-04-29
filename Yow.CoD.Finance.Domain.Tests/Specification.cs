@@ -10,18 +10,19 @@ using Yow.CoD.Finance.Domain.Services;
 namespace Yow.CoD.Finance.Domain.Tests
 {
     [TestFixture]
-    public abstract class Specification<T, TCommand> 
+    public abstract class Specification<T, TCommand, TReceipt> 
         where T : AggregateRoot 
-
         where TCommand : Command
+        where TReceipt : Receipt
     {
         private FakeRepository<T> _repository;
         protected abstract IEnumerable<Event> Given();
         protected abstract TCommand When();
-        protected abstract IHandler<TCommand> CreateHandler();
+        protected abstract IHandler<TCommand, TReceipt> CreateHandler();
 
         protected T Sut { get; set; }
         protected List<Event> Produced { get; private set; }
+        protected TReceipt Receipt { get; private set; }
         protected Exception Caught { get; private set; }
 
         protected IRepository<T> Repository => _repository;
@@ -42,7 +43,7 @@ namespace Yow.CoD.Finance.Domain.Tests
                 
                 var handler = CreateHandler();
                 var cmd = When();
-                await handler.Handle(cmd);
+                Receipt = await handler.Handle(cmd);
                 Produced = _repository.CommitedEvents;
             }
             catch (Exception e)

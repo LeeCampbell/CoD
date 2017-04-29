@@ -3,8 +3,10 @@ using Yow.CoD.Finance.Domain.Contracts;
 
 namespace Yow.CoD.Finance.Domain.Services
 {
-    public interface IHandler<in T> where T : Command
+    public interface IHandler<in TCommand, TReceipt> 
+        where TCommand : Command
+        where TReceipt : Receipt
     {
-        Task Handle(T command);
+        Task<TReceipt> Handle(TCommand command);
     }
 }

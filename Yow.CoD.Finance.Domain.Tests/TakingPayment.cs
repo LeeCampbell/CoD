@@ -7,7 +7,7 @@ using Yow.CoD.Finance.Domain.Services;
 
 namespace Yow.CoD.Finance.Domain.Tests
 {
-    public abstract class TakingPaymentBase : Specification<Loan, TakePaymentCommand>
+    public abstract class TakingPaymentBase : Specification<Loan, TakePaymentCommand, TransactionReceipt>
     {
         protected DateTimeOffset CreatedDate { get; }
         protected decimal LoanAmount { get; }
@@ -39,7 +39,7 @@ namespace Yow.CoD.Finance.Domain.Tests
             return new TakePaymentCommand(Guid.NewGuid(), Sut.Id, TransactionAmount, TransactionDate);
         }
 
-        protected override IHandler<TakePaymentCommand> CreateHandler()
+        protected override IHandler<TakePaymentCommand, TransactionReceipt> CreateHandler()
         {
             return new TakePaymentCommandHandler(Repository);
         }
