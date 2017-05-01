@@ -8,7 +8,6 @@ namespace Yow.CoD.Finance.NancyWebHost.Adapters
     public class LoggingHandler<TCommand, TReceipt> : IHandler<TCommand, TReceipt> 
         where TCommand : Command
         where TReceipt : Receipt
-
     {
         private readonly IHandler<TCommand, TReceipt> _inner;
 

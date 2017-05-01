@@ -5,12 +5,7 @@ namespace Yow.CoD.Finance.NancyWebHost.Models
 {
     public sealed class LoanPaymentModel
     {
-        public LoanPaymentModel(decimal amount)
-        {
-            Amount = amount;
-        }
-        
-        public decimal Amount { get; }
+        public decimal Amount { get; set; }
 
         public TakePaymentCommand ToCommand(Guid loanId)
         {

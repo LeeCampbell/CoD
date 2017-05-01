@@ -16,10 +16,10 @@ namespace Yow.CoD.Finance.Domain.Services
 
         public async Task<TransactionReceipt> Handle(TakePaymentCommand command)
         {
-            var loan = await _repository.Get(command.AggregateId);
+            Loan loan = await _repository.Get(command.AggregateId);
             loan.TakePayment(command);
-            var txId = loan.GetUncommitedEvents().OfType<PaymentTakenEvent>().Single().TransactionId;
-            var receipt = new TransactionReceipt(loan.Id, loan.Version, txId);
+            var paymentTakenEvent = loan.GetUncommitedEvents().OfType<PaymentTakenEvent>().Single();
+            var receipt = new TransactionReceipt(loan.Id, loan.Version, paymentTakenEvent.TransactionId);
             await _repository.Save(loan);
             return receipt;
         }

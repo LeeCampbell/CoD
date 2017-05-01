@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
 using Yow.CoD.Finance.Domain.Services;
 
@@ -24,11 +23,8 @@ namespace Yow.CoD.Finance.NancyWebHost.Adapters
 
         public Task Save(T item)
         {
-            CommitedEvents.AddRange(item.GetUncommitedEvents());
             item.ClearUncommitedEvents();
             return Task.CompletedTask;
         }
-
-        public List<Event> CommitedEvents { get; } = new List<Event>();
     }
 }
