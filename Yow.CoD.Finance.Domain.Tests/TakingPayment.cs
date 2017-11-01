@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
+using Xunit;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
 using Yow.CoD.Finance.Domain.Services;
@@ -24,6 +24,7 @@ namespace Yow.CoD.Finance.Domain.Tests
             LoanAmount = loanAmount;
             TransactionDate = transactionDate;
             TransactionAmount = transactionAmount;
+            Execute();
         }
 
         protected override IEnumerable<Event> Given()
@@ -55,11 +56,11 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
         }
 
-        [Test]
+        [Fact]
         public void ThrowsInvalidArgEx()
         {
-            Assert.That(Caught, Is.InstanceOf<ArgumentException>()
-                .And.Message.EqualTo("Transaction date can not be prior to loan creation\r\nParameter name: command"));
+            Assert.IsAssignableFrom<ArgumentException>(Caught);
+            Assert.Equal("Transaction date can not be prior to loan creation\r\nParameter name: command", Caught.Message);
         }
     }
 
@@ -73,11 +74,11 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
         }
 
-        [Test]
+        [Fact]
         public void ThrowsInvalidArgEx()
         {
-            Assert.That(Caught, Is.InstanceOf<ArgumentException>()
-                .And.Message.EqualTo("Transaction amount must be positive\r\nParameter name: command"));
+            Assert.IsAssignableFrom<ArgumentException>(Caught);
+            Assert.Equal("Transaction amount must be positive\r\nParameter name: command", Caught.Message);
         }
     }
 
@@ -91,11 +92,11 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
         }
 
-        [Test]
+        [Fact]
         public void ThrowsInvalidArgEx()
         {
-            Assert.That(Caught, Is.InstanceOf<ArgumentException>()
-                .And.Message.EqualTo("Transaction amount must be positive\r\nParameter name: command"));
+            Assert.IsAssignableFrom<ArgumentException>(Caught);
+            Assert.Equal("Transaction amount must be positive\r\nParameter name: command", Caught.Message);
         }
     }
 
@@ -109,12 +110,12 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
         }
 
-        [Test]
+        [Fact]
         public void PaymentTakenEventRaised()
         {
             var actual = (PaymentTakenEvent) Produced[0];
-            Assert.That(actual.TransactionDate, Is.EqualTo(TransactionDate));
-            Assert.That(actual.Amount, Is.EqualTo(TransactionAmount));
+            Assert.Equal(TransactionDate, actual.TransactionDate);
+            Assert.Equal(TransactionAmount, actual.Amount);
         }
     }
 
@@ -128,19 +129,19 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
         }
 
-        [Test]
+        [Fact]
         public void PaymentTakenEventRaised()
         {
             var actual = (PaymentTakenEvent) Produced[0];
-            Assert.That(actual.TransactionDate, Is.EqualTo(TransactionDate));
-            Assert.That(actual.Amount, Is.EqualTo(TransactionAmount));
+            Assert.Equal(TransactionDate, actual.TransactionDate);
+            Assert.Equal(TransactionAmount, actual.Amount);
         }
 
-        [Test]
+        [Fact]
         public void LoanSettledEventRaised()
         {
             var actual = (LoanSettledEvent) Produced[1];
-            Assert.That(actual.TransactionDate, Is.EqualTo(TransactionDate));
+            Assert.Equal(TransactionDate, actual.TransactionDate);
         }
     }
     
@@ -154,26 +155,26 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
         }
 
-        [Test]
+        [Fact]
         public void PaymentTakenEventRaised()
         {
             var actual = (PaymentTakenEvent) Produced[0];
-            Assert.That(actual.TransactionDate, Is.EqualTo(TransactionDate));
-            Assert.That(actual.Amount, Is.EqualTo(TransactionAmount));
+            Assert.Equal(TransactionDate, actual.TransactionDate);
+            Assert.Equal(TransactionAmount, actual.Amount);
         }
 
-        [Test]
+        [Fact]
         public void LoanSettledEventRaised()
         {
             var actual = (LoanSettledEvent) Produced[1];
-            Assert.That(actual.TransactionDate, Is.EqualTo(TransactionDate));
+            Assert.Equal(TransactionDate, actual.TransactionDate);
         }
-        [Test]
+        [Fact]
         public void LoanOverPaidEventRaised()
         {
             var actual = (LoanOverPaidEvent) Produced[2];
-            Assert.That(actual.TransactionDate, Is.EqualTo(TransactionDate));
-            Assert.That(actual.Amount, Is.EqualTo(TransactionAmount - LoanAmount));
+            Assert.Equal(TransactionDate, actual.TransactionDate);
+            Assert.Equal(TransactionAmount - LoanAmount, actual.Amount);
         }
     }
 }

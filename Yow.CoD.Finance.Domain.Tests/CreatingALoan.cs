@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
+using Xunit;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
 using Yow.CoD.Finance.Domain.Services;
@@ -24,7 +24,7 @@ namespace Yow.CoD.Finance.Domain.Tests
                 paymentPlan: PaymentPlan.Weekly,
                 amount: 1000,
                 term: new Duration(12, DurationUnit.Month));
-
+            Execute();
         }
         protected override IEnumerable<Event> Given()
         {
@@ -41,37 +41,42 @@ namespace Yow.CoD.Finance.Domain.Tests
             return new CreateLoanCommandHandler(Repository);
         }
 
-        [Test]
+        [Fact]
         public void LoanCreatedEventRaised()
         {
             var actual = (LoanCreatedEvent)Produced[0];
-            Assert.That(actual.CreatedOn, Is.EqualTo(_command.CreatedOn));
-            Assert.That(actual.Amount, Is.EqualTo(_command.Amount));
-            Assert.That(actual.Term, Is.EqualTo(_command.Term));
-            Assert.That(actual.PaymentPlan, Is.EqualTo(_command.PaymentPlan));
+            Assert.Equal(_command.CreatedOn, actual.CreatedOn);
+            Assert.Equal(_command.Amount, actual.Amount);
+            Assert.Equal(_command.Term, actual.Term);
+            Assert.Equal(_command.PaymentPlan, actual.PaymentPlan);
         }
 
-        [Test]
+        [Fact]
         public void LoanCustomerContactChangedEventRaised()
         {
             var actual = (LoanCustomerContactChangedEvent)Produced[1];
-            Assert.That(actual.CustomerContact.Name, Is.EqualTo(_command.CustomerContact.Name));
-            Assert.That(actual.CustomerContact.PreferredPhoneNumber, Is.EqualTo(_command.CustomerContact.PreferredPhoneNumber));
-            Assert.That(actual.CustomerContact.AlternatePhoneNumber, Is.EqualTo(_command.CustomerContact.AlternatePhoneNumber));
-            Assert.That(actual.CustomerContact.PostalAddress, Is.EqualTo(_command.CustomerContact.PostalAddress));
+            Assert.Equal(_command.CustomerContact.Name, actual.CustomerContact.Name);
+            Assert.Equal(_command.CustomerContact.PreferredPhoneNumber, actual.CustomerContact.PreferredPhoneNumber);
+            Assert.Equal(_command.CustomerContact.AlternatePhoneNumber, actual.CustomerContact.AlternatePhoneNumber);
+            Assert.Equal(_command.CustomerContact.PostalAddress, actual.CustomerContact.PostalAddress);
         }
 
-        [Test]
+        [Fact]
         public void LoanBankAccountChangedEventRaised()
         {
             var actual = (LoanBankAccountChangedEvent)Produced[2];
-            Assert.That(actual.BankAccount.Bsb, Is.EqualTo(_command.BankAccount.Bsb));
-            Assert.That(actual.BankAccount.AccountNumber, Is.EqualTo(_command.BankAccount.AccountNumber));
+            Assert.Equal(_command.BankAccount.Bsb, actual.BankAccount.Bsb);
+            Assert.Equal(_command.BankAccount.AccountNumber, actual.BankAccount.AccountNumber);
         }
     }
 
     public class CreatingALoanMutlipleTimes : Specification<Loan, CreateLoanCommand, Receipt>
     {
+        public CreatingALoanMutlipleTimes()
+        {
+            Execute();
+        }
+
         protected override IEnumerable<Event> Given()
         {
             yield return new LoanCreatedEvent(new DateTime(2000, 01, 01), 2000m, new Duration(12, DurationUnit.Month), PaymentPlan.Weekly);
@@ -97,11 +102,11 @@ namespace Yow.CoD.Finance.Domain.Tests
             return new CreateLoanCommandHandler(Repository);
         }
 
-        [Test]
+        [Fact]
         public void Throws()
         {
-            Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
-                .And.Message.EqualTo("Loan already created."));
+            Assert.IsAssignableFrom<InvalidOperationException>(Caught);
+            Assert.Equal("Loan already created.", Caught.Message);
         }
     }
 
@@ -114,6 +119,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
             _amount = amount;
             _expectedError = expectedError;
+            Execute();
         }
 
         protected override IEnumerable<Event> Given()
@@ -141,11 +147,11 @@ namespace Yow.CoD.Finance.Domain.Tests
             return new CreateLoanCommandHandler(Repository);
         }
 
-        [Test]
+        [Fact]
         public void Throws()
         {
-            Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
-                .And.Message.EqualTo(_expectedError));
+            Assert.IsAssignableFrom<InvalidOperationException>(Caught);
+            Assert.Equal(_expectedError, Caught.Message);
         }
     }
 
@@ -153,7 +159,7 @@ namespace Yow.CoD.Finance.Domain.Tests
     {
         public CreatingALoanOver2000Dollars()
             : base(2001, "Only loan amounts between $50.00 and $2000.00 are supported.")
-        {   
+        {
         }
     }
     public sealed class CreatingALoanUnder50Dollars : CreatingALoanWithInvalidAmounts
@@ -173,6 +179,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         {
             _term = term;
             _expectedError = expectedError;
+            Execute();
         }
 
         protected override IEnumerable<Event> Given()
@@ -200,11 +207,11 @@ namespace Yow.CoD.Finance.Domain.Tests
             return new CreateLoanCommandHandler(Repository);
         }
 
-        [Test]
+        [Fact]
         public void Throws()
         {
-            Assert.That(Caught, Is.InstanceOf<InvalidOperationException>()
-                .And.Message.EqualTo(_expectedError));
+            Assert.IsAssignableFrom<InvalidOperationException>(Caught);
+            Assert.Equal(_expectedError, Caught.Message);
         }
     }
 

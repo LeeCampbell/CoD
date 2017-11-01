@@ -1,10 +1,9 @@
 using System;
-using NUnit.Framework;
+using Xunit;
 using Yow.CoD.Finance.Domain.Contracts;
 
 namespace Yow.CoD.Finance.Domain.Tests.Contracts
 {
-    [TestFixture]
     public sealed class CreateLoanCommandFixture
     {
         private static readonly Guid ValidCommandId = Guid.NewGuid();
@@ -16,7 +15,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         private const decimal ValidLoanAmount = 1000m;
         private const PaymentPlan ValidPaymentPlan = PaymentPlan.Weekly;
 
-        [Test]
+        [Fact]
         public void RejectsZeroValueForCommandId()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(Guid.Empty,
@@ -27,10 +26,10 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.AreEqual("CommandId must be non default value\r\nParameter name: commandId", ex.Message);
+            Assert.Equal("CommandId must be non default value\r\nParameter name: commandId", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void RejectsZeroValueForAggregateId()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -41,10 +40,10 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.AreEqual("AggregateId must be non default value\r\nParameter name: aggregateId", ex.Message);
+            Assert.Equal("AggregateId must be non default value\r\nParameter name: aggregateId", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void RejectsZeroValueForCreatedOn()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -55,9 +54,9 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.AreEqual("CreatedOn must be non default value\r\nParameter name: createdOn", ex.Message);
+            Assert.Equal("CreatedOn must be non default value\r\nParameter name: createdOn", ex.Message);
         }
-        [Test]
+        [Fact]
         public void RejectsNullValueForCustomerContact()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -68,10 +67,10 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.AreEqual("CustomerContact must be non null\r\nParameter name: customerContact", ex.Message);
+            Assert.Equal("CustomerContact must be non null\r\nParameter name: customerContact", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void RejectsNullValueForBankAccount()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -82,10 +81,10 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.AreEqual("BankAccount must be non null\r\nParameter name: bankAccount", ex.Message);
+            Assert.Equal("BankAccount must be non null\r\nParameter name: bankAccount", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void RejectsZeroValueForPaymentPlan()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -96,10 +95,10 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           PaymentPlan.None, 
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.AreEqual("PaymentPlan must be non default value\r\nParameter name: paymentPlan", ex.Message);
+            Assert.Equal("PaymentPlan must be non default value\r\nParameter name: paymentPlan", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void RejectsZeroValueForAmount()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -110,10 +109,10 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           0,
                                                           ValidDuration));
-            Assert.AreEqual("Amount must be non zero value\r\nParameter name: amount", ex.Message);
+            Assert.Equal("Amount must be non zero value\r\nParameter name: amount", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void RejectsNullValueForTerm()
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
@@ -124,7 +123,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           null));
-            Assert.AreEqual("Term must be non null\r\nParameter name: term", ex.Message);
+            Assert.Equal("Term must be non null\r\nParameter name: term", ex.Message);
         }
     }
 }
