@@ -1,68 +1,71 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
 using Yow.CoD.Finance.Domain.Contracts;
 
 namespace Yow.CoD.Finance.Domain.Tests.Contracts
 {
-    [TestFixture]
     public sealed class BankAccountFixture
     {
-        [TestCase(null)]
-        [TestCase("")]
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
         public void RequiresBsb(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount(value, "12345678"));
-            Assert.AreEqual("BSB is required\r\nParameter name: bsb", ex.Message);
+            Assert.Equal("BSB is required\r\nParameter name: bsb", ex.Message);
         }
-        [TestCase("Abc-123")]
-        [TestCase("Abc123")]
-        [TestCase("00600")]
-        [TestCase("066-00")]
-        [TestCase("066-0000")]
-        [TestCase("0066-000")]
+        [Theory]
+        [InlineData("Abc-123")]
+        [InlineData("Abc123")]
+        [InlineData("00600")]
+        [InlineData("066-00")]
+        [InlineData("066-0000")]
+        [InlineData("0066-000")]
         public void RejectsInvalidBsb(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount(value, "12345678"));
-            Assert.AreEqual("BSB is not valid\r\nParameter name: bsb", ex.Message);
+            Assert.Equal("BSB is not valid\r\nParameter name: bsb", ex.Message);
         }
-        [TestCase("066000", "066-000")]
-        [TestCase("123456", "123-456")]
-        [TestCase("066-000", "066-000")]
-        [TestCase("123-456", "123-456")]
+        [Theory]
+        [InlineData("066000", "066-000")]
+        [InlineData("123456", "123-456")]
+        [InlineData("066-000", "066-000")]
+        [InlineData("123-456", "123-456")]
         public void AcceptsValidBsb(string value, string expected)
         {
             var actual = new BankAccount(value, "12345678");
-            Assert.AreEqual(expected, actual.Bsb);
+            Assert.Equal(expected, actual.Bsb);
         }
-        
-        [TestCase(null)]
-        [TestCase("")]
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
         public void RequiresAccountNumber(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount("066-000", value));
-            Assert.AreEqual("Account number is required\r\nParameter name: accountNumber", ex.Message);
+            Assert.Equal("Account number is required\r\nParameter name: accountNumber", ex.Message);
         }
-        [TestCase("1234567890123")]//Too long
-        [TestCase(" 123")]//Spaces
-        [TestCase("1")]//Minimum of 3
-        [TestCase("12")]//Minimum of 3
-        [TestCase("123a")]
-        [TestCase("a123")]
+        [Theory]
+        [InlineData("1234567890123")]//Too long
+        [InlineData(" 123")]//Spaces
+        [InlineData("1")]//Minimum of 3
+        [InlineData("12")]//Minimum of 3
+        [InlineData("123a")]
+        [InlineData("a123")]
         public void RejectsInvalidAccountNumber(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount("066-000", value));
-            Assert.AreEqual("Account number is not valid\r\nParameter name: accountNumber", ex.Message);
+            Assert.Equal("Account number is not valid\r\nParameter name: accountNumber", ex.Message);
         }
 
-        [TestCase("123")]
-        [TestCase("123456")]
-        [TestCase("123456789012")]
+        [Theory]
+        [InlineData("123")]
+        [InlineData("123456")]
+        [InlineData("123456789012")]
         public void AcceptsValidAccountNumber(string value)
         {
             var actual = new BankAccount("066-000", value);
-            Assert.AreEqual(value, actual.AccountNumber);
+            Assert.Equal(value, actual.AccountNumber);
         }
-
-
     }
 }

@@ -10,8 +10,15 @@ namespace Yow.CoD.Finance.NancyWebHost
 {
     /*
      cd C:\Users\Lee\Documents\GitHub\CoD\Yow.CoD.Finance.NancyWebHost
+
      curl -i -H "Content-Type: application/json" -X POST -d @CreateLoanExamplePayload.json http://localhost:64181/Loan
-     curl -i -H "Content-Type: application/json" -X POST -d @TakePaymentExamplePayload.json http://localhost:64181/Loan/
+     //Get the loanId returned and add to the suffix of this command
+     curl -i -H "Content-Type: application/json" -X POST -d @TakePaymentExamplePayload.json http://localhost:64181/Loan/{GUID}
+
+     --Powershell
+     Invoke-WebRequest -ContentType "application/json" -Headers @{"accept"="application/json"} -Method Post -InFile "CreateLoanExamplePayload.json" -UseBasicParsing -Uri "http://localhost:64181/Loan"
+     //Get the loanId returned and add to the suffix of this command
+     Invoke-WebRequest -ContentType "application/json" -Headers @{"accept"="application/json"} -Method Post -InFile "TakePaymentExamplePayload.json" -UseBasicParsing -Uri "http://localhost:64181/Loan/{GUID}" 
     */
 
     public sealed class LoanModule : NancyModule
