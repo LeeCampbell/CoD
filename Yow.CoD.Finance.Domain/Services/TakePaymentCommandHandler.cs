@@ -18,7 +18,7 @@ namespace Yow.CoD.Finance.Domain.Services
         {
             Loan loan = await _repository.Get(command.AggregateId);
             loan.TakePayment(command);
-            var paymentTakenEvent = loan.GetUncommitedEvents().OfType<PaymentTakenEvent>().Single();
+            var paymentTakenEvent = loan.GetUncommittedEvents().OfType<PaymentTakenEvent>().Single();
             var receipt = new TransactionReceipt(loan.Id, loan.Version, paymentTakenEvent.TransactionId);
             await _repository.Save(loan);
             return receipt;

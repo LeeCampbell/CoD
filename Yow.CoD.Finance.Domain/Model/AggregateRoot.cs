@@ -6,7 +6,7 @@ namespace Yow.CoD.Finance.Domain.Model
 {
     public abstract class AggregateRoot
     {
-        private readonly List<Event> _uncommitedEvents = new List<Event>();
+        private readonly List<Event> _uncommittedEvents = new List<Event>();
         private readonly Dictionary<Type, Action<object>> _handlers =new Dictionary<Type, Action<object>>();
 
         protected AggregateRoot(Guid id)
@@ -25,7 +25,7 @@ namespace Yow.CoD.Finance.Domain.Model
 
         protected void AddEvent(Event uncommittedEvent)
         {
-            _uncommitedEvents.Add(uncommittedEvent);
+            _uncommittedEvents.Add(uncommittedEvent);
             ApplyEvent(uncommittedEvent);
         }
 
@@ -34,14 +34,14 @@ namespace Yow.CoD.Finance.Domain.Model
             _handlers.Add(typeof(T), e=>handler((T)e));
         }
 
-        public Event[] GetUncommitedEvents()
+        public Event[] GetUncommittedEvents()
         {
-            return _uncommitedEvents.ToArray();
+            return _uncommittedEvents.ToArray();
         }
 
-        public void ClearUncommitedEvents()
+        public void ClearUncommittedEvents()
         {
-            _uncommitedEvents.Clear();
+            _uncommittedEvents.Clear();
         }
     }
 }

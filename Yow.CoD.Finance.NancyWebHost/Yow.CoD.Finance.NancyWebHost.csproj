@@ -88,7 +88,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\CreateLoanModel.cs" />
     <Compile Include="LoanModule.cs" />
-    <Compile Include="Models\LoadCreatedModel.cs" />
+    <Compile Include="Models\LoanCreatedModel.cs" />
     <Compile Include="Models\LoanPaymentModel.cs" />
     <Compile Include="Models\PaymentTakenModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

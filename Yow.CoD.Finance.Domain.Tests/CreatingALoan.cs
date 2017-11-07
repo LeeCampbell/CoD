@@ -155,6 +155,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         }
     }
 
+
     public sealed class CreatingALoanOver2000Dollars : CreatingALoanWithInvalidAmounts
     {
         public CreatingALoanOver2000Dollars()

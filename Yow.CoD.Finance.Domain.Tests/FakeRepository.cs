@@ -24,8 +24,8 @@ namespace Yow.CoD.Finance.Domain.Tests
 
         public Task Save(T item)
         {
-            CommitedEvents.AddRange(item.GetUncommitedEvents());
-            item.ClearUncommitedEvents();
+            CommitedEvents.AddRange(item.GetUncommittedEvents());
+            item.ClearUncommittedEvents();
             return Task.CompletedTask;
         }
 

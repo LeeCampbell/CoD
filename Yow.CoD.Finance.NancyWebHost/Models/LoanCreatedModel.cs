@@ -2,7 +2,7 @@
 
 namespace Yow.CoD.Finance.NancyWebHost.Models
 {
-    public sealed class LoadCreatedModel
+    public sealed class LoanCreatedModel
     {
         public Guid LoanId { get; set; }
     }

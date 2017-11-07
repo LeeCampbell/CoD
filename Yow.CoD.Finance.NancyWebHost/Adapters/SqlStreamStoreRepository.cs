@@ -39,12 +39,12 @@ namespace Yow.CoD.Finance.NancyWebHost.Adapters
         public async Task Save(Loan loan)
         {
             var streamId = GetStreamId(loan.Id);
-            var events = loan.GetUncommitedEvents();
+            var events = loan.GetUncommittedEvents();
             var expectedVersion = loan.Version - events.Length;
             var eventStore = new MsSqlStreamStore(new MsSqlStreamStoreSettings("myconnectionString"));
             var messages = events.Select(Serialize).ToArray();
             await eventStore.AppendToStream(streamId, expectedVersion, messages);
-            loan.ClearUncommitedEvents();
+            loan.ClearUncommittedEvents();
         }
 
         private static string GetStreamId(Guid loanId)
