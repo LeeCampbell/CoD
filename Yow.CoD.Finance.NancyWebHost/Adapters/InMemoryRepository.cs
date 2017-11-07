@@ -23,7 +23,7 @@ namespace Yow.CoD.Finance.NancyWebHost.Adapters
 
         public Task Save(T item)
         {
-            item.ClearUncommitedEvents();
+            item.ClearUncommittedEvents();
             return Task.CompletedTask;
         }
     }

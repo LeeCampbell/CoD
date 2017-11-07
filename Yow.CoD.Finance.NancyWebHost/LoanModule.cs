@@ -36,12 +36,12 @@ namespace Yow.CoD.Finance.NancyWebHost
             Post["/Loan/{id:guid}/"] = parameters => TakePayment(parameters.id);
         }
 
-        private async Task<LoadCreatedModel> CreateLoan(object _)
+        private async Task<LoanCreatedModel> CreateLoan(object _)
         {
             var model = this.Bind<CreateLoanModel>();
             var command = model.ToCommand();
             var receipt = await _createLoanCommandHandler.Handle(command);
-            return new LoadCreatedModel
+            return new LoanCreatedModel
             {
                 LoanId = receipt.AggregateId
             };
