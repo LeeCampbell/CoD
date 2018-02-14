@@ -40,6 +40,6 @@ public class CreateALoanTest {
         DomainEvent[] events = loan.GetUncommittedEvents();
 
         //assertTrue("Creating a loan should emit a loan created event", events.length);
-        assertEquals(0, events.length);
+        assertEquals(1, events.length);
     }
 }
