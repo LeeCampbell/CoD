@@ -6,12 +6,13 @@ import java.util.UUID;
 
 public final class CreateLoanCommand extends DomainCommand
 {
-    
     private final OffsetDateTime createdOn;
     private final CustomerContact customerContact;
+    private final BankAccount bankAccount;
+    private final PaymentPlan paymentPlan;
     private final BigDecimal amount;
+    private final Duration term;
     
-    //TODO: Complete this port -LC
     public CreateLoanCommand(
         UUID commandId, 
         UUID aggregateId,
@@ -33,7 +34,10 @@ public final class CreateLoanCommand extends DomainCommand
 
             this.createdOn = createdOn;
             this.customerContact = customerContact;
+            this.bankAccount = bankAccount;
+            this.paymentPlan = paymentPlan;
             this.amount = amount;
+            this.term = term;
     }
 
     public OffsetDateTime createdOn(){
@@ -43,8 +47,20 @@ public final class CreateLoanCommand extends DomainCommand
     public CustomerContact customerContact(){
         return customerContact;
     }
+
+    public BankAccount bankAccount(){
+        return bankAccount;
+    }
+
+    public PaymentPlan paymentPlan(){
+        return paymentPlan;
+    }
     
     public BigDecimal amount(){
         return amount;
+    }
+
+    public Duration term(){
+        return term;
     }
 }

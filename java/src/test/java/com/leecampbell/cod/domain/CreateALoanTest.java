@@ -1,38 +1,70 @@
 package com.leecampbell.cod.domain;
 
-import org.junit.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
+
 import com.leecampbell.cod.domain.contracts.*;
 import com.leecampbell.cod.domain.model.Loan;
 
+import org.junit.Test;
+
 public class CreateALoanTest {
-    @Test
-    public void loanCreatedEventIsRaised() {
-        CreateLoanCommand cmd = CreateCommand();
-        Loan loan = new Loan(cmd.AggregateId());
+
+    private CreateLoanCommand cmd;
+    private Loan loan;
+
+    public CreateALoanTest() {
+        cmd = CreateCommand();
+        loan = new Loan(cmd.AggregateId());
         loan.Create(cmd);
-
-        DomainEvent[] events = loan.GetUncommittedEvents();
-
-        //assertTrue("Creating a loan should emit a loan created event", events.length);
-        assertEquals(1, events.length);
     }
 
     @Test
-    public void loanCommitClearUncommittedEvents() {
-        CreateLoanCommand cmd = CreateCommand();
-        Loan loan = new Loan(cmd.AggregateId());
-        loan.Create(cmd);
+    public void loanCreatedEventIsRaised() {
+        LoanCreatedEvent actual = (LoanCreatedEvent) loan.GetUncommittedEvents()[0];
 
+        assertEquals(cmd.createdOn(), actual.createdOn());
+        assertEquals(cmd.amount(), actual.amount());
+        assertEquals(cmd.term(), actual.term());
+        assertEquals(cmd.paymentPlan(), actual.paymentPlan());
+    }
+
+    @Test
+    public void loanCustomerContactChangedEventRaised() {
+        LoanCustomerContactChangedEvent actual = (LoanCustomerContactChangedEvent) loan.GetUncommittedEvents()[1];
+        assertEquals(cmd.customerContact().name(), actual.customerContact().name());
+        assertEquals(cmd.customerContact().preferredPhoneNumber(), actual.customerContact().preferredPhoneNumber());
+        assertEquals(cmd.customerContact().alternatePhoneNumber(), actual.customerContact().alternatePhoneNumber());
+        assertEquals(cmd.customerContact().postalAddress(), actual.customerContact().postalAddress());
+    }
+
+    @Test
+    public void loanBankAccountChangedEventRaised() {
+        LoanBankAccountChangedEvent actual = (LoanBankAccountChangedEvent) loan.GetUncommittedEvents()[2];
+        assertEquals(cmd.bankAccount().bsb(), actual.bankAccount().bsb());
+        assertEquals(cmd.bankAccount().accountNumber(), actual.bankAccount().accountNumber());
+    }
+
+    @Test
+    public void subsequentCallToCreateThrows(){
+        CreateLoanCommand cmd2 = CreateCommand();
+        try {
+            loan.Create(cmd2);    
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Loan already created.", e.getMessage());
+        }
+        
+    }
+
+    @Test
+    public void commitClearsUncommittedEvents() {
         loan.ClearUncommittedEvents();
         DomainEvent[] events = loan.GetUncommittedEvents();
 
-        //assertTrue("Creating a loan should emit a loan created event", events.length);
         assertEquals(0, events.length);
     }
 
