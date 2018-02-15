@@ -1,7 +1,6 @@
 package com.leecampbell.cod.domain.model;
 
-import com.leecampbell.cod.domain.contracts.CreateLoanCommand;
-import com.leecampbell.cod.domain.contracts.LoanCreatedEvent;
+import com.leecampbell.cod.domain.contracts.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -13,6 +12,7 @@ public final class Loan extends AggregateRoot {
     private OffsetDateTime createdOn;
     private BigDecimal loanAmount;
     private BigDecimal balance;
+    private BankAccount bankAccount;
 
     public Loan(UUID loanId) {
         super(loanId);
@@ -24,11 +24,14 @@ public final class Loan extends AggregateRoot {
             throw new UnsupportedOperationException("Loan already created.");
         if (command.amount().compareTo(MIN_AMOUNT) < 0 || MAX_AMOUNT.compareTo(command.amount()) < 0)
             throw new UnsupportedOperationException("Only loan amounts between $50.00 and $2000.00 are supported.");
-        //if (!IsUnder2Years(command.Term)) throw new UnsupportedOperationException("Only loan terms up to 2 years are supported.");
+        if (!isUnder2Years(command.term()))
+            throw new UnsupportedOperationException("Only loan terms up to 2 years are supported.");
 
-        AddEvent(new LoanCreatedEvent(command.createdOn(), command.amount()));
-        //AddEvent(new LoanCustomerContactChangedEvent(command.CustomerContact.Name, command.CustomerContact.PreferredPhoneNumber, command.CustomerContact.AlternatePhoneNumber, command.CustomerContact.PostalAddress));
-        //AddEvent(new LoanBankAccountChangedEvent(command.BankAccount.Bsb, command.BankAccount.AccountNumber));
+        AddEvent(new LoanCreatedEvent(command.createdOn(), command.term(), command.paymentPlan(), command.amount()));
+        AddEvent(new LoanCustomerContactChangedEvent(command.customerContact().name(),
+                command.customerContact().preferredPhoneNumber(), command.customerContact().alternatePhoneNumber(),
+                command.customerContact().postalAddress()));
+        AddEvent(new LoanBankAccountChangedEvent(command.bankAccount().bsb(), command.bankAccount().accountNumber()));
     }
 
     //public void DisburseFunds(DisburseLoanFundsCommand command) {
@@ -61,12 +64,12 @@ public final class Loan extends AggregateRoot {
     //     _balance += e.Amount;
     // }
 
-    // private void Handle(LoanCustomerContactChangedEvent e) {
-    // }
+    private void handle(LoanCustomerContactChangedEvent e) {
+    }
 
-    // private void Handle(LoanBankAccountChangedEvent e) {
-    //     _bankAccount = new BankAccount(e.BankAccount.Bsb, e.BankAccount.AccountNumber);
-    // }
+    private void handle(LoanBankAccountChangedEvent e) {
+        this.bankAccount = e.bankAccount();
+    }
 
     // private void Handle(PaymentTakenEvent e) {
     //     _balance += e.Amount;
@@ -78,16 +81,16 @@ public final class Loan extends AggregateRoot {
     // private void Handle(LoanOverPaidEvent e) {
     // }
 
-    // private static bool IsUnder2Years(Duration duration) {
-    //     switch (duration.Unit) {
-    //     case DurationUnit.Day:
-    //         return duration.Length < 365 * 2;
-    //     case DurationUnit.Week:
-    //         return duration.Length < 52 * 2;
-    //     case DurationUnit.Month:
-    //         return duration.Length < 12 * 2;
-    //     default:
-    //         throw new ArgumentOutOfRangeException();
-    //     }
-    // }
+    private static boolean isUnder2Years(Duration duration) {
+        switch (duration.Unit()) {
+        case Day:
+            return duration.length() < 365 * 2;
+        case Week:
+            return duration.length() < 52 * 2;
+        case Month:
+            return duration.length() < 12 * 2;
+        default:
+            throw new IllegalArgumentException("Unsupported duration");
+        }
+    }
 }
