@@ -13,6 +13,7 @@ public final class Loan extends AggregateRoot {
     private BigDecimal loanAmount;
     private BigDecimal balance;
     private BankAccount bankAccount;
+    private OffsetDateTime disbursedOn;
 
     public Loan(UUID loanId) {
         super(loanId);
@@ -34,8 +35,13 @@ public final class Loan extends AggregateRoot {
         AddEvent(new LoanBankAccountChangedEvent(command.bankAccount().bsb(), command.bankAccount().accountNumber()));
     }
 
-    //public void DisburseFunds(DisburseLoanFundsCommand command) {
-    //}
+    public void DisburseFunds(DisburseLoanFundsCommand command) {
+        if (disbursedOn != null)
+            throw new UnsupportedOperationException("Funds are already disbursed.");
+
+        BankAccount disburseToAccount = new BankAccount(bankAccount.bsb(), bankAccount.accountNumber());
+        AddEvent(new LoanDisbursedFundsEvent(command.transactionDate(), loanAmount.negate(), disburseToAccount));
+    }
     //public void TakePayment(TakePaymentCommand command) {
     //}
     //public void ReverseDisbursement(ReverseDisbursement command) {
@@ -59,10 +65,10 @@ public final class Loan extends AggregateRoot {
         balance = BigDecimal.ZERO; //Balance is zero until we disburse the money.
     }
 
-    // private void Handle(LoanDisbursedFundsEvent e) {
-    //     _disbursedOn = e.TransactionDate;
-    //     _balance += e.Amount;
-    // }
+    private void handle(LoanDisbursedFundsEvent e) {
+        disbursedOn = e.transactionDate();
+        balance = balance.add(e.amount());
+    }
 
     private void handle(LoanCustomerContactChangedEvent e) {
     }

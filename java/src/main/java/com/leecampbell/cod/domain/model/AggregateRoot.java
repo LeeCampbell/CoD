@@ -16,6 +16,10 @@ public abstract class AggregateRoot {
         this.id = id;
     }
 
+    public UUID id(){
+        return id;
+    }
+
     public void ApplyEvent(DomainEvent payload) {
         Class<? extends AggregateRoot> rootType = this.getClass();
         Class<? extends DomainEvent> eventType = payload.getClass();
