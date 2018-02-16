@@ -1,6 +1,7 @@
 package com.leecampbell.cod.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -53,7 +54,8 @@ public class CreateALoanTest {
     public void subsequentCallToCreateThrows(){
         CreateLoanCommand cmd2 = CreateCommand();
         try {
-            loan.Create(cmd2);    
+            loan.Create(cmd2);
+            fail("Create should duplicate calls to create.");
         } catch (UnsupportedOperationException e) {
             assertEquals("Loan already created.", e.getMessage());
         }
