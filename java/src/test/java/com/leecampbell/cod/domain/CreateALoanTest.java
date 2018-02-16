@@ -57,7 +57,6 @@ public class CreateALoanTest {
         } catch (UnsupportedOperationException e) {
             assertEquals("Loan already created.", e.getMessage());
         }
-        
     }
 
     @Test

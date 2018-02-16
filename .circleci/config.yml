@@ -42,3 +42,10 @@ jobs:
       - run: 
           command : gradle test
           working_directory: java
+      
+      - store_test_results:
+          path: java/build/test-results/test
+
+      - store_artifacts:
+          path: java/build/test-results/test
+          destination: tests
