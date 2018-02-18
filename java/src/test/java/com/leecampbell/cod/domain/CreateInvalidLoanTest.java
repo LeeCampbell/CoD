@@ -27,7 +27,7 @@ public class CreateInvalidLoanTest {
     private static final Duration validTerm = new Duration(12, DurationUnit.Month);
 
     @DataPoints("invalidAmounts")
-    public static final BigDecimal[] invalidSmallAmounts = { BigDecimal.valueOf(-1), BigDecimal.ZERO, BigDecimal.valueOf(49),BigDecimal.valueOf(2001),  };
+    public static final BigDecimal[] invalidAmounts = { BigDecimal.valueOf(-1), BigDecimal.ZERO, BigDecimal.valueOf(49),BigDecimal.valueOf(2001),  };
     
 
     @Theory
