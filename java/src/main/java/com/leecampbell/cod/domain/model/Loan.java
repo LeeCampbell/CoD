@@ -42,8 +42,22 @@ public final class Loan extends AggregateRoot {
         BankAccount disburseToAccount = new BankAccount(bankAccount.bsb(), bankAccount.accountNumber());
         AddEvent(new LoanDisbursedFundsEvent(command.transactionDate(), loanAmount.negate(), disburseToAccount));
     }
-    //public void TakePayment(TakePaymentCommand command) {
-    //}
+
+    public void TakePayment(TakePaymentCommand command) {
+        if (createdOn == null)
+            throw new UnsupportedOperationException("Take payment attempted on an uncreated loan.");
+        if (command.transactionDate().compareTo(createdOn) < 0)
+            throw new UnsupportedOperationException("Transaction date can not be prior to loan creation.");
+        if (command.transactionAmount().compareTo(BigDecimal.ZERO) <= 0)
+            throw new UnsupportedOperationException("Transaction amount must be positive.");
+
+        AddEvent(new PaymentTakenEvent(UUID.randomUUID().toString(), command.transactionDate(),
+                command.transactionAmount()));
+        if (balance.compareTo(BigDecimal.ZERO) >= 0)
+            AddEvent(new LoanSettledEvent(command.transactionDate()));
+        if (balance.compareTo(BigDecimal.ZERO) > 0)
+            AddEvent(new LoanOverPaidEvent(command.transactionDate(), balance));
+    }
     //public void ReverseDisbursement(ReverseDisbursement command) {
     //}
     //public void ReversePayment(ReversePaymentCommand command) {
@@ -77,15 +91,15 @@ public final class Loan extends AggregateRoot {
         this.bankAccount = e.bankAccount();
     }
 
-    // private void Handle(PaymentTakenEvent e) {
-    //     _balance += e.Amount;
-    // }
+    private void handle(PaymentTakenEvent e) {
+        balance = balance.add(e.amount());
+    }
 
-    // private void Handle(LoanSettledEvent e) {
-    // }
+    private void handle(LoanSettledEvent e) {
+    }
 
-    // private void Handle(LoanOverPaidEvent e) {
-    // }
+    private void handle(LoanOverPaidEvent e) {
+    }
 
     private static boolean isUnder2Years(Duration duration) {
         switch (duration.Unit()) {
