@@ -18,7 +18,7 @@ public abstract class DomainCommand {
         return commandId;
     }
 
-    public UUID AggregateId() {
+    public UUID aggregateId() {
         return aggregateId;
     }
 }

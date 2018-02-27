@@ -33,7 +33,7 @@ public class CreateInvalidLoanTest {
     @Theory
     public void creatingLoanRejectsAmountValuesBelow50Above2000(@FromDataPoints("invalidAmounts") BigDecimal amount) {
         CreateLoanCommand cmd = new CreateLoanCommand(validCommandId, validAggregateId, validCreatedOn, validCustomerContact, validBankAccount, PaymentPlan.Weekly, amount, validTerm);
-        loan = new Loan(cmd.AggregateId());
+        loan = new Loan(cmd.aggregateId());
         try {
             loan.Create(cmd);
             fail("Create should throw when amount below 50 or above 2000.");
@@ -46,7 +46,7 @@ public class CreateInvalidLoanTest {
     public void rejectCreatingLoansOver24Months(){
         Duration term = new Duration(25, DurationUnit.Month);
         CreateLoanCommand cmd = new CreateLoanCommand(validCommandId, validAggregateId, validCreatedOn, validCustomerContact, validBankAccount, PaymentPlan.Weekly, validAmount, term);
-        loan = new Loan(cmd.AggregateId());
+        loan = new Loan(cmd.aggregateId());
         try {
             loan.Create(cmd);
             fail("Create should throw when term exceeds 25 months.");
@@ -60,7 +60,7 @@ public class CreateInvalidLoanTest {
     public void rejectCreatingLoansOver104Weeks(){
         Duration term = new Duration(105, DurationUnit.Week);
         CreateLoanCommand cmd = new CreateLoanCommand(validCommandId, validAggregateId, validCreatedOn, validCustomerContact, validBankAccount, PaymentPlan.Weekly, validAmount, term);
-        loan = new Loan(cmd.AggregateId());
+        loan = new Loan(cmd.aggregateId());
         try {
             loan.Create(cmd);
             fail("Create should throw when term exceeds 104 weeks.");

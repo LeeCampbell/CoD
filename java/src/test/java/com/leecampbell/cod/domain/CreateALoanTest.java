@@ -20,7 +20,7 @@ public class CreateALoanTest {
 
     public CreateALoanTest() {
         cmd = CreateCommand();
-        loan = new Loan(cmd.AggregateId());
+        loan = new Loan(cmd.aggregateId());
         loan.Create(cmd);
     }
 
