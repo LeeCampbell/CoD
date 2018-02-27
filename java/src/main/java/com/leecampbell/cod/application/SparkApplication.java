@@ -1,19 +1,16 @@
 package com.leecampbell.cod.application;
 
-import static spark.Spark.*;
+import static spark.Spark.post;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 import com.google.gson.Gson;
 import com.leecampbell.cod.domain.contracts.*;
 import com.leecampbell.cod.domain.model.Loan;
-import com.leecampbell.cod.domain.services.CreateLoanCommandHandler;
-import com.leecampbell.cod.domain.services.Repository;
+import com.leecampbell.cod.domain.services.*;
 
 import spark.Request;
 import spark.Response;
@@ -22,17 +19,7 @@ public class SparkApplication {
     private static final Gson gson = new Gson();
 
     public static void main(String[] args) {
-        get("/hello", (req, res) -> "Hello, World! GFY");
-
-        post("/Loan", "application/json", SparkApplication::createLoan);
-        get("/foo", "application/json", (req, res) -> {
-            Repository repository = new FakeRepository();
-            CreateLoanCommandHandler handler = new CreateLoanCommandHandler(repository);
-            CreateLoanCommand command = CreateCommand();
-
-            Receipt r = handler.handle(command);
-            return r.aggregateId().toString();
-        });
+        post("/Loan", "application/json", SparkApplication::createLoan, gson::toJson);
     }
 
     private static Object createLoan(Request request, Response response) {
@@ -46,17 +33,7 @@ public class SparkApplication {
 
         LoanCreatedModel responseModel = new LoanCreatedModel();
         responseModel.loanId = receipt.aggregateId();
-        return gson.toJson(responseModel);
-    }
-
-    private static CreateLoanCommand CreateCommand() {
-        CustomerContact customerContact = new CustomerContact("Jane Doe", "0412341234", "0856785678",
-                "10 St Georges Terrace, Perth, WA 6000");
-        BankAccount bankAccount = new BankAccount("066-000", "12345678");
-
-        return new CreateLoanCommand(UUID.randomUUID(), UUID.randomUUID(),
-                OffsetDateTime.of(2001, 2, 3, 4, 5, 6, 7, ZoneOffset.UTC), customerContact, bankAccount,
-                PaymentPlan.Weekly, BigDecimal.valueOf(1000), new Duration(12, DurationUnit.Month));
+        return responseModel;
     }
 
     static final class FakeRepository implements Repository {
