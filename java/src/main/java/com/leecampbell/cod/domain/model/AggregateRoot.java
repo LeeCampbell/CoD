@@ -9,7 +9,6 @@ public abstract class AggregateRoot {
 
     private final UUID id;
     private final List<DomainEvent> uncommittedEvents = new ArrayList<DomainEvent>();
-    //private static Map<String, Method> mutatorMethods = new HashMap<String, Method>();
     private int version;
 
     protected AggregateRoot(UUID id) {
@@ -25,28 +24,18 @@ public abstract class AggregateRoot {
     }
 
     public void ApplyEvent(DomainEvent payload) {
-        Class<? extends AggregateRoot> rootType = this.getClass();
-        Class<? extends DomainEvent> eventType = payload.getClass();
         try {
             Method handler = getMethod(payload);
             handler.setAccessible(true);
 			handler.invoke(this, payload);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        }
+        
         version++;
     }
 
@@ -59,9 +48,7 @@ public abstract class AggregateRoot {
     public void ClearUncommittedEvents() {
         uncommittedEvents.clear();
     }
-
     
-
     protected void AddEvent(DomainEvent uncommittedEvent) {
         uncommittedEvents.add(uncommittedEvent);
         ApplyEvent(uncommittedEvent);
@@ -71,21 +58,6 @@ public abstract class AggregateRoot {
         Class<? extends AggregateRoot> rootType = this.getClass();
         Class<? extends DomainEvent> eventType = payload.getClass();
 
-        Method method = null;
-
-        try {
-
-            // assume protected or private...
-
-            method = rootType.getDeclaredMethod("handle", eventType);
-
-        } catch (Exception e) {
-
-            // then public...
-
-            method = rootType.getMethod("handle", eventType);
-        }
-
-        return method;
+        return rootType.getDeclaredMethod("handle", eventType);
     }
 }
