@@ -20,6 +20,10 @@ public abstract class AggregateRoot {
         return id;
     }
 
+    public int version() {
+        return version;
+    }
+
     public void ApplyEvent(DomainEvent payload) {
         Class<? extends AggregateRoot> rootType = this.getClass();
         Class<? extends DomainEvent> eventType = payload.getClass();
@@ -56,9 +60,7 @@ public abstract class AggregateRoot {
         uncommittedEvents.clear();
     }
 
-    protected int version() {
-        return version;
-    }
+    
 
     protected void AddEvent(DomainEvent uncommittedEvent) {
         uncommittedEvents.add(uncommittedEvent);
