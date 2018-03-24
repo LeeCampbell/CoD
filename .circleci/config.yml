@@ -40,7 +40,7 @@ jobs:
         
       # run tests!
       - run: 
-          command : gradle test
+          command : gradle check
           working_directory: java
       
       - store_test_results:
@@ -49,3 +49,11 @@ jobs:
       - store_artifacts:
           path: java/build/test-results/test
           destination: tests
+
+      - store_artifacts:
+          path: java/build/reports/jacoco/test
+          destination: testCoverage
+
+      - run: 
+          command : gradle coveralls
+          working_directory: java

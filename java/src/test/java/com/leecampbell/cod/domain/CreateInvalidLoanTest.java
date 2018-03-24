@@ -11,7 +11,6 @@ import java.util.UUID;
 import com.leecampbell.cod.domain.contracts.*;
 import com.leecampbell.cod.domain.model.Loan;
 
-import org.junit.Test;
 import org.junit.experimental.theories.*;
 import org.junit.runner.RunWith;
 
@@ -30,6 +29,9 @@ public class CreateInvalidLoanTest {
     public static final BigDecimal[] invalidAmounts = { BigDecimal.valueOf(-1), BigDecimal.ZERO, BigDecimal.valueOf(49),BigDecimal.valueOf(2001),  };
     
 
+    @DataPoints("overlimitDurations")
+    public static final Duration[] overlimitDurations = { new Duration(730, DurationUnit.Day), new Duration(105, DurationUnit.Week), new Duration(25, DurationUnit.Month)  };
+
     @Theory
     public void creatingLoanRejectsAmountValuesBelow50Above2000(@FromDataPoints("invalidAmounts") BigDecimal amount) {
         CreateLoanCommand cmd = new CreateLoanCommand(validCommandId, validAggregateId, validCreatedOn, validCustomerContact, validBankAccount, PaymentPlan.Weekly, amount, validTerm);
@@ -42,28 +44,13 @@ public class CreateInvalidLoanTest {
         }
     }
 
-    @Test
-    public void rejectCreatingLoansOver24Months(){
-        Duration term = new Duration(25, DurationUnit.Month);
+    @Theory
+    public void rejectCreatingLoansOver2years(@FromDataPoints("overlimitDurations") Duration term){
         CreateLoanCommand cmd = new CreateLoanCommand(validCommandId, validAggregateId, validCreatedOn, validCustomerContact, validBankAccount, PaymentPlan.Weekly, validAmount, term);
         loan = new Loan(cmd.aggregateId());
         try {
             loan.Create(cmd);
-            fail("Create should throw when term exceeds 25 months.");
-        } catch (UnsupportedOperationException e) {
-            assertEquals("Only loan terms up to 2 years are supported.", e.getMessage());
-        }
-    }
-
-    
-    @Test
-    public void rejectCreatingLoansOver104Weeks(){
-        Duration term = new Duration(105, DurationUnit.Week);
-        CreateLoanCommand cmd = new CreateLoanCommand(validCommandId, validAggregateId, validCreatedOn, validCustomerContact, validBankAccount, PaymentPlan.Weekly, validAmount, term);
-        loan = new Loan(cmd.aggregateId());
-        try {
-            loan.Create(cmd);
-            fail("Create should throw when term exceeds 104 weeks.");
+            fail("Create should throw when term exceeds 2 years.");
         } catch (UnsupportedOperationException e) {
             assertEquals("Only loan terms up to 2 years are supported.", e.getMessage());
         }
