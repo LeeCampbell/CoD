@@ -16,4 +16,8 @@ public final class Duration {
     public DurationUnit Unit() {
         return this.unit;
     }
+
+    public String toString() { 
+        return "Duration{length:" + this.length + ", unit:" + this.unit + "}";
+    } 
 }
