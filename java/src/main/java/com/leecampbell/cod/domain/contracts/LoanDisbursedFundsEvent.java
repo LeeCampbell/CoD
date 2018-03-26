@@ -15,15 +15,15 @@ public final class LoanDisbursedFundsEvent extends DomainEvent {
         this.disbursedTo = disbursedTo;
     }
 
-    public OffsetDateTime transactionDate() {
+    public OffsetDateTime getTransactionDate() {
         return this.transactionDate;
     }
 
-    public BigDecimal amount() {
+    public BigDecimal getAmount() {
         return this.amount;
     }
 
-    public BankAccount disbursedTo() {
+    public BankAccount getDisbursedTo() {
         return this.disbursedTo;
     }
 }

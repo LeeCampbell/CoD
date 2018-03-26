@@ -11,7 +11,7 @@ public final class DisburseLoanFundsCommand extends DomainCommand {
         this.transactionDate = transactionDate;
     }
 
-    public OffsetDateTime transactionDate() {
+    public OffsetDateTime getTransactionDate() {
         return this.transactionDate;
     }
 }

@@ -19,44 +19,44 @@ public final class Loan extends AggregateRoot {
         super(loanId);
     }
 
-    public void Create(CreateLoanCommand command) {
+    public void create(CreateLoanCommand command) {
 
-        if (version() > 0)
+        if (getVersion() > 0)
             throw new UnsupportedOperationException("Loan already created.");
         if (command.amount().compareTo(MIN_AMOUNT) < 0 || MAX_AMOUNT.compareTo(command.amount()) < 0)
             throw new UnsupportedOperationException("Only loan amounts between $50.00 and $2000.00 are supported.");
         if (!isUnder2Years(command.term()))
             throw new UnsupportedOperationException("Only loan terms up to 2 years are supported.");
 
-        AddEvent(new LoanCreatedEvent(command.createdOn(), command.term(), command.paymentPlan(), command.amount()));
-        AddEvent(new LoanCustomerContactChangedEvent(command.customerContact().name(),
+        addEvent(new LoanCreatedEvent(command.createdOn(), command.term(), command.paymentPlan(), command.amount()));
+        addEvent(new LoanCustomerContactChangedEvent(command.customerContact().name(),
                 command.customerContact().preferredPhoneNumber(), command.customerContact().alternatePhoneNumber(),
                 command.customerContact().postalAddress()));
-        AddEvent(new LoanBankAccountChangedEvent(command.bankAccount().bsb(), command.bankAccount().accountNumber()));
+        addEvent(new LoanBankAccountChangedEvent(command.bankAccount().getBsb(), command.bankAccount().getAccountNumber()));
     }
 
-    public void DisburseFunds(DisburseLoanFundsCommand command) {
+    public void disburseFunds(DisburseLoanFundsCommand command) {
         if (disbursedOn != null)
             throw new UnsupportedOperationException("Funds are already disbursed.");
 
-        BankAccount disburseToAccount = new BankAccount(bankAccount.bsb(), bankAccount.accountNumber());
-        AddEvent(new LoanDisbursedFundsEvent(command.transactionDate(), loanAmount.negate(), disburseToAccount));
+        BankAccount disburseToAccount = new BankAccount(bankAccount.getBsb(), bankAccount.getAccountNumber());
+        addEvent(new LoanDisbursedFundsEvent(command.getTransactionDate(), loanAmount.negate(), disburseToAccount));
     }
 
-    public void TakePayment(TakePaymentCommand command) {
+    public void takePayment(TakePaymentCommand command) {
         if (createdOn == null)
             throw new UnsupportedOperationException("Take payment attempted on an uncreated loan.");
-        if (command.transactionDate().compareTo(createdOn) < 0)
+        if (command.getTransactionDate().compareTo(createdOn) < 0)
             throw new UnsupportedOperationException("Transaction date can not be prior to loan creation.");
-        if (command.transactionAmount().compareTo(BigDecimal.ZERO) <= 0)
+        if (command.getTransactionAmount().compareTo(BigDecimal.ZERO) <= 0)
             throw new UnsupportedOperationException("Transaction amount must be positive.");
 
-        AddEvent(new PaymentTakenEvent(UUID.randomUUID().toString(), command.transactionDate(),
-                command.transactionAmount()));
+        addEvent(new PaymentTakenEvent(UUID.randomUUID().toString(), command.getTransactionDate(),
+                command.getTransactionAmount()));
         if (balance.compareTo(BigDecimal.ZERO) >= 0)
-            AddEvent(new LoanSettledEvent(command.transactionDate()));
+            addEvent(new LoanSettledEvent(command.getTransactionDate()));
         if (balance.compareTo(BigDecimal.ZERO) > 0)
-            AddEvent(new LoanOverPaidEvent(command.transactionDate(), balance));
+            addEvent(new LoanOverPaidEvent(command.getTransactionDate(), balance));
     }
     //public void ReverseDisbursement(ReverseDisbursement command) {
     //}
@@ -74,21 +74,21 @@ public final class Loan extends AggregateRoot {
     //}
 
     private void handle(LoanCreatedEvent e) {
-        createdOn = e.createdOn();
-        loanAmount = e.amount();
+        createdOn = e.getCreatedOn();
+        loanAmount = e.getAmount();
         balance = BigDecimal.ZERO; //Balance is zero until we disburse the money.
     }
 
     private void handle(LoanDisbursedFundsEvent e) {
-        disbursedOn = e.transactionDate();
-        balance = balance.add(e.amount());
+        disbursedOn = e.getTransactionDate();
+        balance = balance.add(e.getAmount());
     }
 
     private void handle(LoanCustomerContactChangedEvent e) {
     }
 
     private void handle(LoanBankAccountChangedEvent e) {
-        this.bankAccount = e.bankAccount();
+        this.bankAccount = e.getBankAccount();
     }
 
     private void handle(PaymentTakenEvent e) {

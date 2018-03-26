@@ -9,7 +9,7 @@ public final class LoanSettledEvent extends DomainEvent{
         this.transactionDateTime = transactionDateTime;
     }
 
-    public OffsetDateTime transactionDateTime(){
+    public OffsetDateTime getTransactionDateTime(){
         return this.transactionDateTime;
     }
 }

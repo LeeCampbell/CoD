@@ -32,22 +32,22 @@ public class SparkApplication {
         Receipt receipt = handler.handle(command);
 
         LoanCreatedModel responseModel = new LoanCreatedModel();
-        responseModel.loanId = receipt.aggregateId();
+        responseModel.loanId = receipt.getAggregateId();
         return responseModel;
     }
 
     static final class FakeRepository implements Repository {
         private final ArrayList<DomainEvent> commitedEvents = new ArrayList<DomainEvent>();
 
-        public Loan Get(UUID id) {
+        public Loan get(UUID id) {
             return new Loan(id);
         }
 
-        public void Save(Loan item) {
-            List<DomainEvent> temp = Arrays.asList(item.GetUncommittedEvents());
+        public void save(Loan item) {
+            List<DomainEvent> temp = Arrays.asList(item.getUncommittedEvents());
             commitedEvents.addAll(temp);
 
-            item.ClearUncommittedEvents();
+            item.clearUncommittedEvents();
         }
     }
 }

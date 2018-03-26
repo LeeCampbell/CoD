@@ -22,11 +22,11 @@ public final class BankAccount {
         this.accountNumber = accountNumber;
     }
 
-    public String bsb() {
+    public String getBsb() {
         return this.bsb;
     }
 
-    public String accountNumber() {
+    public String getAccountNumber() {
         return this.accountNumber;
     }
 }

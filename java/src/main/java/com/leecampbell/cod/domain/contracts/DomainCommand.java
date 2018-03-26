@@ -14,11 +14,11 @@ public abstract class DomainCommand {
         this.aggregateId = aggregateId;
     }
 
-    public UUID commandId() {
+    public UUID getCommandId() {
         return commandId;
     }
 
-    public UUID aggregateId() {
+    public UUID getAggregateId() {
         return aggregateId;
     }
 }

@@ -69,6 +69,15 @@ public final class CustomerContactTests {
     }
 
     @Theory
+    public void rejectsInvalidFormatAlternatePhoneNumber(@FromDataPoints("invalidPhoneNumbers") String value) {
+        try {
+            new CustomerContact("Jane Doe", "0856785678", value, "10 St Georges Terrace, Perth, WA 6000");
+            fail("CustomerContact should reject invalid alternatePhoneNumber argument.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("alternatePhoneNumber is not valid", e.getMessage());
+        }
+    }
+    @Theory
     public void allowsValidFormatAlternatePhoneNumber(@FromDataPoints("validPhoneNumbers") String expected) {
         CustomerContact actual = new CustomerContact("Jane Doe", "0412341234", expected,
                 "10 St Georges Terrace, Perth, WA 6000");
