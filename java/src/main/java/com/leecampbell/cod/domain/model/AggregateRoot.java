@@ -15,15 +15,15 @@ public abstract class AggregateRoot {
         this.id = id;
     }
 
-    public UUID id(){
+    public UUID getId(){
         return id;
     }
 
-    public int version() {
+    public int getVersion() {
         return version;
     }
 
-    public void ApplyEvent(DomainEvent payload) {
+    public void applyEvent(DomainEvent payload) {
         try {
             Method handler = getMethod(payload);
             handler.setAccessible(true);
@@ -39,19 +39,19 @@ public abstract class AggregateRoot {
         version++;
     }
 
-    public DomainEvent[] GetUncommittedEvents() {
+    public DomainEvent[] getUncommittedEvents() {
         DomainEvent[] snapshot = new DomainEvent[uncommittedEvents.size()];
         snapshot = uncommittedEvents.toArray(snapshot);
         return snapshot;
     }
 
-    public void ClearUncommittedEvents() {
+    public void clearUncommittedEvents() {
         uncommittedEvents.clear();
     }
     
-    protected void AddEvent(DomainEvent uncommittedEvent) {
+    protected void addEvent(DomainEvent uncommittedEvent) {
         uncommittedEvents.add(uncommittedEvent);
-        ApplyEvent(uncommittedEvent);
+        applyEvent(uncommittedEvent);
     }
 
     private Method getMethod(DomainEvent payload) throws NoSuchMethodException, SecurityException {

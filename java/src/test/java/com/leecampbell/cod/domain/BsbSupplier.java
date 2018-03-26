@@ -6,7 +6,7 @@ import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.PotentialAssignment;
 
-public class BsbSupplier extends ParameterSupplier {
+public final class BsbSupplier extends ParameterSupplier {
     public BsbSupplier(){
 
     }

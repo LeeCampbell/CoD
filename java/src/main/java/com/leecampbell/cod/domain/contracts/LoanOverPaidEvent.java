@@ -13,11 +13,11 @@ public final class LoanOverPaidEvent extends DomainEvent{
         this.amount = amount;
     }
 
-    public OffsetDateTime transactionDateTime() {
+    public OffsetDateTime getTransactionDateTime() {
         return this.transactionDateTime;
     }
 
-    public BigDecimal amount() {
+    public BigDecimal getAmount() {
         return this.amount;
     }
 }

@@ -60,7 +60,7 @@ public class BankAccountContractTests {
     @Theory
     public void acceptsValidBsb(@validBsbValues Pair<String, String> inputExpectedPair) {
         BankAccount actual = new BankAccount(inputExpectedPair.getLeft(), "12345678");
-        assertEquals(inputExpectedPair.getRight(), actual.bsb());
+        assertEquals(inputExpectedPair.getRight(), actual.getBsb());
     }
 
     @Theory
@@ -86,6 +86,6 @@ public class BankAccountContractTests {
     @Theory
     public void acceptsValidAccountNumber(@FromDataPoints("validAccountNumber") String value) {
         BankAccount actual = new BankAccount("066-000", value);
-        assertEquals(value, actual.accountNumber());
+        assertEquals(value, actual.getAccountNumber());
     }
 }

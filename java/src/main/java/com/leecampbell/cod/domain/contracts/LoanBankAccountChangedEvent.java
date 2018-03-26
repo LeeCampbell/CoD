@@ -7,7 +7,7 @@ public final class LoanBankAccountChangedEvent extends DomainEvent {
         this.bankAccount = new BankAccount(bankAccountBsb, bankAccountAccountNumber);
     }
 
-    public BankAccount bankAccount() {
+    public BankAccount getBankAccount() {
         return bankAccount;
     }
 }

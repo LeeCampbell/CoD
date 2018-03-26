@@ -16,19 +16,19 @@ public final class LoanCreatedEvent extends DomainEvent {
         this.amount = amount;
     }
 
-    public OffsetDateTime createdOn() {
+    public OffsetDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public Duration term() {
+    public Duration getTerm() {
         return term;
     }
 
-    public PaymentPlan paymentPlan(){
+    public PaymentPlan getPaymentPlan(){
         return paymentPlan;
     }
 
-    public BigDecimal amount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 }

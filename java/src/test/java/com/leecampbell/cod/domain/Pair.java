@@ -1,6 +1,6 @@
 package com.leecampbell.cod.domain;
 
-public class Pair<L,R> {
+class Pair<L,R> {
 
     private final L left;
     private final R right;

@@ -37,21 +37,21 @@ public final class TakePaymentTest {
     public TakePaymentTest() {
 
         loan = new Loan(UUID.randomUUID());
-        loan.ApplyEvent(new LoanCreatedEvent(CreatedDate, new Duration(12, DurationUnit.Month), PaymentPlan.Weekly,
+        loan.applyEvent(new LoanCreatedEvent(CreatedDate, new Duration(12, DurationUnit.Month), PaymentPlan.Weekly,
                 LoanAmount));
-        loan.ApplyEvent(new LoanCustomerContactChangedEvent("bob", "0444444444", "0812341234", "10 Random Street"));
-        loan.ApplyEvent(new LoanBankAccountChangedEvent("066-000", "12345678"));
-        loan.ApplyEvent(new LoanDisbursedFundsEvent(CreatedDate.plus(1, ChronoUnit.HOURS), LoanAmount.negate(),
+        loan.applyEvent(new LoanCustomerContactChangedEvent("bob", "0444444444", "0812341234", "10 Random Street"));
+        loan.applyEvent(new LoanBankAccountChangedEvent("066-000", "12345678"));
+        loan.applyEvent(new LoanDisbursedFundsEvent(CreatedDate.plus(1, ChronoUnit.HOURS), LoanAmount.negate(),
                 new BankAccount("066-000", "12345678")));
     }
 
     @Test
     public void takingPaymentOnUnCreatedLoanThrows() {
         Loan uncreatedLoan = new Loan(UUID.randomUUID());
-        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.id(), ValidPaymentAmount,
+        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.getId(), ValidPaymentAmount,
                 ValidTransactionDate);
         try {
-            uncreatedLoan.TakePayment(cmd);
+            uncreatedLoan.takePayment(cmd);
             fail("Should reject takePayment on uncreated loan.");
         } catch (UnsupportedOperationException e) {
             assertEquals("Take payment attempted on an uncreated loan.", e.getMessage());
@@ -60,10 +60,10 @@ public final class TakePaymentTest {
 
     @Test
     public void takingPaymentBeforeCreationDateThrows() {
-        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.id(), ValidPaymentAmount,
+        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.getId(), ValidPaymentAmount,
                 CreatedDate.plus(-1, ChronoUnit.SECONDS));
         try {
-            loan.TakePayment(cmd);
+            loan.takePayment(cmd);
             fail("Should reject takePayment on prior to creation date.");
         } catch (UnsupportedOperationException e) {
             assertEquals("Transaction date can not be prior to loan creation.", e.getMessage());
@@ -72,9 +72,9 @@ public final class TakePaymentTest {
 
     @Theory
     public void takingPaymentOfZeroOrNegativeAmountThrows(@FromDataPoints("invalidAmounts") BigDecimal amount) {
-        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.id(), amount, ValidTransactionDate);
+        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.getId(), amount, ValidTransactionDate);
         try {
-            loan.TakePayment(cmd);
+            loan.takePayment(cmd);
             fail("Should reject takePayment with zero or negative amount.");
         } catch (UnsupportedOperationException e) {
             assertEquals("Transaction amount must be positive.", e.getMessage());
@@ -83,11 +83,11 @@ public final class TakePaymentTest {
 
     @Test
     public void takingAPaymentRaisedPaymentTakenEvent() {
-        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.id(), ValidPaymentAmount, ValidTransactionDate);
-        loan.TakePayment(cmd);
+        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.getId(), ValidPaymentAmount, ValidTransactionDate);
+        loan.takePayment(cmd);
 
-        assertEquals(1, loan.GetUncommittedEvents().length);
-        PaymentTakenEvent paymentTakenEvent = (PaymentTakenEvent)loan.GetUncommittedEvents()[0];
+        assertEquals(1, loan.getUncommittedEvents().length);
+        PaymentTakenEvent paymentTakenEvent = (PaymentTakenEvent)loan.getUncommittedEvents()[0];
         assertNotNull(paymentTakenEvent.transactionId());
         assertEquals(ValidTransactionDate, paymentTakenEvent.transactionDateTime());
         assertEquals(ValidPaymentAmount, paymentTakenEvent.amount());
@@ -96,28 +96,28 @@ public final class TakePaymentTest {
 
     @Test
     public void takingPaymentForLoanBalanceRaisesLoanSettledEvent(){
-        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.id(), LoanAmount, ValidTransactionDate);
-        loan.TakePayment(cmd);
+        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.getId(), LoanAmount, ValidTransactionDate);
+        loan.takePayment(cmd);
 
-        assertEquals(2, loan.GetUncommittedEvents().length);
-        assertThat("Expecting first event to be PaymentTakenEvent", loan.GetUncommittedEvents()[0], IsInstanceOf.instanceOf(PaymentTakenEvent.class));
+        assertEquals(2, loan.getUncommittedEvents().length);
+        assertThat("Expecting first event to be PaymentTakenEvent", loan.getUncommittedEvents()[0], IsInstanceOf.instanceOf(PaymentTakenEvent.class));
                 
-        LoanSettledEvent loanSettledEvent = (LoanSettledEvent)loan.GetUncommittedEvents()[1];
-        assertEquals(ValidTransactionDate, loanSettledEvent.transactionDateTime());
+        LoanSettledEvent loanSettledEvent = (LoanSettledEvent)loan.getUncommittedEvents()[1];
+        assertEquals(ValidTransactionDate, loanSettledEvent.getTransactionDateTime());
     }
 
     @Test
     public void takingPaymentForMoreThanLoanBalanceRaisesLoanSettledEvent(){
         BigDecimal overPaidBy = BigDecimal.valueOf(1);
-        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.id(), LoanAmount.add(overPaidBy), ValidTransactionDate);
-        loan.TakePayment(cmd);
+        TakePaymentCommand cmd = new TakePaymentCommand(UUID.randomUUID(), loan.getId(), LoanAmount.add(overPaidBy), ValidTransactionDate);
+        loan.takePayment(cmd);
 
-        assertEquals(3, loan.GetUncommittedEvents().length);
-        assertThat("Expecting first event to be PaymentTakenEvent", loan.GetUncommittedEvents()[0], IsInstanceOf.instanceOf(PaymentTakenEvent.class));
-        assertThat("Expecting second event to be LoanSettledEvent", loan.GetUncommittedEvents()[1], IsInstanceOf.instanceOf(LoanSettledEvent.class));
+        assertEquals(3, loan.getUncommittedEvents().length);
+        assertThat("Expecting first event to be PaymentTakenEvent", loan.getUncommittedEvents()[0], IsInstanceOf.instanceOf(PaymentTakenEvent.class));
+        assertThat("Expecting second event to be LoanSettledEvent", loan.getUncommittedEvents()[1], IsInstanceOf.instanceOf(LoanSettledEvent.class));
                 
-        LoanOverPaidEvent loanOverPaidEvent = (LoanOverPaidEvent)loan.GetUncommittedEvents()[2];
-        assertEquals(ValidTransactionDate, loanOverPaidEvent.transactionDateTime());
-        assertEquals(overPaidBy, loanOverPaidEvent.amount());
+        LoanOverPaidEvent loanOverPaidEvent = (LoanOverPaidEvent)loan.getUncommittedEvents()[2];
+        assertEquals(ValidTransactionDate, loanOverPaidEvent.getTransactionDateTime());
+        assertEquals(overPaidBy, loanOverPaidEvent.getAmount());
     }
 }

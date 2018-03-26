@@ -15,11 +15,11 @@ public final class TakePaymentCommand extends DomainCommand {
         this.transactionDate = transactionDate;
     }
 
-    public BigDecimal transactionAmount(){
+    public BigDecimal getTransactionAmount(){
         return this.transactionAmount;
     }
 
-    public OffsetDateTime transactionDate() {
+    public OffsetDateTime getTransactionDate() {
         return this.transactionDate;
     }
 }
