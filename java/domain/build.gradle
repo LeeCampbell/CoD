@@ -1,0 +1,7 @@
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+
+}
