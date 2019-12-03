@@ -40,7 +40,6 @@ coveralls {
 tasks.coveralls {	
   group = 'Coverage reports'	
   description = 'Uploads the coverage report to Coveralls.io'	
-
-  dependsOn jacocoTestReport	
+	
   onlyIf { System.env.'CI' }	
 }
