@@ -20,6 +20,10 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'CoD.Host',
                    'Implementation-Version': '1.0.0',
-                   'Implementation-Vendor' : 'LeeCampbell.com'
+                   'Implementation-Vendor' : 'LeeCampbell.com',
+                   'Main-Class': 'com.leecampbell.cod.application.App'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
