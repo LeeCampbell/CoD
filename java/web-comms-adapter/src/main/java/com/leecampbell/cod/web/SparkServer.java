@@ -1,6 +1,7 @@
 package com.leecampbell.cod.web;
 
 import static spark.Spark.post;
+import static spark.Spark.get;
 
 import com.google.gson.Gson;
 import com.leecampbell.cod.domain.contracts.CreateLoanCommand;
@@ -19,6 +20,7 @@ public class SparkServer {
     }
 
     public void serve(){
+        get("/", (req, res) -> "YOW 2017 - Cost Of a Dependency");
         post("/Loan", "application/json", this::createLoan, gson::toJson);
     }
 

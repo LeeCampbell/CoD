@@ -23,7 +23,7 @@ The easiest way to run it is to open _.\CSharp\Yow.CoD.Finance.sln_ and hit F5
 To send commands to the web endpoint either use Powershell:
 
 ```bat
-cd .\csha
+cd .\scripts
 Invoke-WebRequest -ContentType "application/json" -Headers @{"accept"="application/json"} -Method Post -InFile "CreateLoanExamplePayload.json" -UseBasicParsing -Uri "http://localhost:64181/Loan"
 ```
 
@@ -37,7 +37,7 @@ gradlew run
 At another prompt issue the curl command
 
 ```bat
-cd .\java\src\resources
+cd .\scripts
 curl -i -H "Content-Type: application/json" -X POST -d @CreateLoanExamplePayload.json http://localhost:4567/Loan
 ```
 
