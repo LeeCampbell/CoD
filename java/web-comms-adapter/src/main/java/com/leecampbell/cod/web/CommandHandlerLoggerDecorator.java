@@ -1,4 +1,4 @@
-package com.leecampbell.cod.application;
+package com.leecampbell.cod.web;
 
 import com.leecampbell.cod.domain.services.CommandHandler;
 import com.leecampbell.cod.domain.contracts.DomainCommand;
@@ -31,6 +31,5 @@ public final class CommandHandlerLoggerDecorator<TCommand extends DomainCommand,
             System.out.println();
             throw e;
         }
-
     }
 }

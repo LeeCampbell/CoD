@@ -8,9 +8,7 @@ plugins {
 
 dependencies {
     implementation project(':domain')
-    implementation 'com.sparkjava:spark-core:2.3'
-    implementation 'com.google.inject:guice:4.2.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation project(':web-comms-adapter')
 }
 
 application {
@@ -18,10 +16,9 @@ application {
     mainClassName = 'com.leecampbell.cod.application.App'
 }
 
-
 jar {
     manifest {
-        attributes 'Implementation-Title': 'CoD.WebHost',
+        attributes 'Implementation-Title': 'CoD.Host',
                    'Implementation-Version': '1.0.0',
                    'Implementation-Vendor' : 'LeeCampbell.com'
     }

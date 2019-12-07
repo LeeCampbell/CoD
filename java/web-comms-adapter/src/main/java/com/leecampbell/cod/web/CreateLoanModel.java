@@ -1,4 +1,4 @@
-package com.leecampbell.cod.application;
+package com.leecampbell.cod.web;
 
 import com.leecampbell.cod.domain.contracts.*;
 import java.math.BigDecimal;
