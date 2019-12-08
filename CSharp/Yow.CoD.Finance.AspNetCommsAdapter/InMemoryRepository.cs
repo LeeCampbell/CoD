@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Yow.CoD.Finance.Domain.Model;
 using Yow.CoD.Finance.Domain.Services;
 
-namespace Yow.CoD.Finance.NancyWebHost.Adapters
+namespace Yow.CoD.Finance.AspNetCommsAdapter
 {
     public sealed class InMemoryRepository<T> : IRepository<T> where T : AggregateRoot
     {

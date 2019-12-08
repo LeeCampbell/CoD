@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yow.CoD.Finance.NancyWebHost.Models
+namespace Yow.CoD.Finance.AspNetCommsAdapter.Models
 {
     public sealed class LoanCreatedModel
     {
