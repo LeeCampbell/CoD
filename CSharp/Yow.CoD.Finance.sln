@@ -6,7 +6,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yow.CoD.Finance.Domain", "Y
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yow.CoD.Finance.Domain.Tests", "Yow.CoD.Finance.Domain.Tests\Yow.CoD.Finance.Domain.Tests.csproj", "{6213595D-8FB4-4058-9588-75EE62A37797}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yow.CoD.Finance.AspNetCommsAdapter", "Yow.CoD.Finance.AspNetCommsAdapter\Yow.CoD.Finance.AspNetCommsAdapter.csproj", "{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{7EC070FD-E21D-45E2-A07A-228C20767F00}"
+	ProjectSection(SolutionItems) = preProject
+		docker\app.dockerfile = docker\app.dockerfile
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yow.CoD.Finance.Application", "Yow.CoD.Finance.Application\Yow.CoD.Finance.Application.csproj", "{625D22E7-8092-4F86-86DA-F65C262B5DFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,18 +48,18 @@ Global
 		{6213595D-8FB4-4058-9588-75EE62A37797}.Release|x64.Build.0 = Release|Any CPU
 		{6213595D-8FB4-4058-9588-75EE62A37797}.Release|x86.ActiveCfg = Release|Any CPU
 		{6213595D-8FB4-4058-9588-75EE62A37797}.Release|x86.Build.0 = Release|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Debug|x64.Build.0 = Debug|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Debug|x86.Build.0 = Debug|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Release|x64.ActiveCfg = Release|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Release|x64.Build.0 = Release|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Release|x86.ActiveCfg = Release|Any CPU
-		{18B11EB9-8329-4F0D-8D93-45CD1354ECB0}.Release|x86.Build.0 = Release|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Debug|x64.Build.0 = Debug|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Debug|x86.Build.0 = Debug|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Release|x64.ActiveCfg = Release|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Release|x64.Build.0 = Release|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Release|x86.ActiveCfg = Release|Any CPU
+		{625D22E7-8092-4F86-86DA-F65C262B5DFE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

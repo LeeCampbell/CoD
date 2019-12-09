@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yow.CoD.Finance.AspNetCommsAdapter.Models
+namespace Yow.CoD.Finance.Application.Models
 {
     public sealed class LoanCreatedModel
     {

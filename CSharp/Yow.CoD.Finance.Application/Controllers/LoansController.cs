@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Yow.CoD.Finance.AspNetCommsAdapter.Models;
+using Yow.CoD.Finance.Application.Models;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Services;
 
-namespace Yow.CoD.Finance.AspNetCommsAdapter.Controllers
+namespace Yow.CoD.Finance.Application.Controllers
 {
     [Route("Loan")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace Yow.CoD.Finance.AspNetCommsAdapter.Controllers
             this.createLoanCommandHandler = createLoanCommandHandler;
             this.takePaymentCommandHandler = takePaymentCommandHandler;
         }
-        
+
         [HttpPost("")]
         public async Task<ActionResult<LoanCreatedModel>> CreateLoan(CreateLoanModel model)
         {

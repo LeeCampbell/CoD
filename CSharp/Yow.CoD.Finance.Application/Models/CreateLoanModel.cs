@@ -1,7 +1,7 @@
 ﻿using System;
 using Yow.CoD.Finance.Domain.Contracts;
 
-namespace Yow.CoD.Finance.AspNetCommsAdapter.Models
+namespace Yow.CoD.Finance.Application.Models
 {
     public sealed class CreateLoanModel
     {
