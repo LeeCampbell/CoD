@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Yow.CoD.Finance.Domain\Yow.CoD.Finance.Domain.csproj" />
+    <ProjectReference Include="..\Yow.CoD.Finance.SqlDataAdapter\Yow.CoD.Finance.SqlDataAdapter.csproj" />
   </ItemGroup>
 
 

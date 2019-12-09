@@ -13,3 +13,14 @@ services:
       interval: 60s
       timeout: 5s
       retries: 5
+    depends_on: 
+      - db
+  db:
+    container_name: cod-sqlserver
+    image: cod-sqlserver
+    build:
+      context: docker/MsSql
+      dockerfile: mssql.dockerfile
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
