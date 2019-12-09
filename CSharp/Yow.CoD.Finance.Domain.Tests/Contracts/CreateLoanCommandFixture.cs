@@ -26,7 +26,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.Equal("CommandId must be non default value\r\nParameter name: commandId", ex.Message);
+            Assert.Equal("CommandId must be non default value (Parameter 'commandId')", ex.Message);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.Equal("AggregateId must be non default value\r\nParameter name: aggregateId", ex.Message);
+            Assert.Equal("AggregateId must be non default value (Parameter 'aggregateId')", ex.Message);
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.Equal("CreatedOn must be non default value\r\nParameter name: createdOn", ex.Message);
+            Assert.Equal("CreatedOn must be non default value (Parameter 'createdOn')", ex.Message);
         }
         [Fact]
         public void RejectsNullValueForCustomerContact()
@@ -67,7 +67,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.Equal("CustomerContact must be non null\r\nParameter name: customerContact", ex.Message);
+            Assert.Equal("CustomerContact must be non null (Parameter 'customerContact')", ex.Message);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.Equal("BankAccount must be non null\r\nParameter name: bankAccount", ex.Message);
+            Assert.Equal("BankAccount must be non null (Parameter 'bankAccount')", ex.Message);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           PaymentPlan.None, 
                                                           ValidLoanAmount,
                                                           ValidDuration));
-            Assert.Equal("PaymentPlan must be non default value\r\nParameter name: paymentPlan", ex.Message);
+            Assert.Equal("PaymentPlan must be non default value (Parameter 'paymentPlan')", ex.Message);
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           0,
                                                           ValidDuration));
-            Assert.Equal("Amount must be non zero value\r\nParameter name: amount", ex.Message);
+            Assert.Equal("Amount must be non zero value (Parameter 'amount')", ex.Message);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
                                                           ValidPaymentPlan,
                                                           ValidLoanAmount,
                                                           null));
-            Assert.Equal("Term must be non null\r\nParameter name: term", ex.Message);
+            Assert.Equal("Term must be non null (Parameter 'term')", ex.Message);
         }
     }
 }

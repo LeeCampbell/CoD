@@ -3,6 +3,8 @@ COPY . /home/netsdk/
 WORKDIR /home/netsdk
 
 RUN dotnet restore ./Yow.CoD.Finance.sln
+RUN dotnet build -c=Release ./Yow.CoD.Finance.sln
+RUN dotnet test ./Yow.CoD.Finance.sln --no-build /p:Configuration=Release
 RUN dotnet publish --no-restore --configuration Release --output ./deploy
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1

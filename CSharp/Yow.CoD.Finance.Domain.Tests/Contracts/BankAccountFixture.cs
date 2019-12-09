@@ -12,7 +12,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RequiresBsb(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount(value, "12345678"));
-            Assert.Equal("BSB is required\r\nParameter name: bsb", ex.Message);
+            Assert.Equal("BSB is required (Parameter 'bsb')", ex.Message);
         }
         [Theory]
         [InlineData("Abc-123")]
@@ -24,7 +24,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RejectsInvalidBsb(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount(value, "12345678"));
-            Assert.Equal("BSB is not valid\r\nParameter name: bsb", ex.Message);
+            Assert.Equal("BSB is not valid (Parameter 'bsb')", ex.Message);
         }
         [Theory]
         [InlineData("066000", "066-000")]
@@ -43,7 +43,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RequiresAccountNumber(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount("066-000", value));
-            Assert.Equal("Account number is required\r\nParameter name: accountNumber", ex.Message);
+            Assert.Equal("Account number is required (Parameter 'accountNumber')", ex.Message);
         }
         [Theory]
         [InlineData("1234567890123")]//Too long
@@ -55,7 +55,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RejectsInvalidAccountNumber(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new BankAccount("066-000", value));
-            Assert.Equal("Account number is not valid\r\nParameter name: accountNumber", ex.Message);
+            Assert.Equal("Account number is not valid (Parameter 'accountNumber')", ex.Message);
         }
 
         [Theory]

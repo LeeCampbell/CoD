@@ -12,7 +12,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RequiresCustomerName(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new CustomerContact(value, "0412341234", "0856785678", "10 St Georges Terrace, Perth, WA 6000"));
-            Assert.Equal("Name is required\r\nParameter name: name", ex.Message);
+            Assert.Equal("Name is required (Parameter 'name')", ex.Message);
         }
 
         [Theory]
@@ -21,7 +21,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RequiresPreferredPhoneNumber(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new CustomerContact("Jane Doe", value, "0856785678", "10 St Georges Terrace, Perth, WA 6000"));
-            Assert.Equal("Phone number is required\r\nParameter name: preferredPhoneNumber", ex.Message);
+            Assert.Equal("Phone number is required (Parameter 'preferredPhoneNumber')", ex.Message);
         }
 
         [Theory]
@@ -32,7 +32,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RejectsInvalidFormatPreferredPhoneNumber(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new CustomerContact("Jane Doe", value, "0856785678", "10 St Georges Terrace, Perth, WA 6000"));
-            Assert.Equal("Phone number is not valid\r\nParameter name: preferredPhoneNumber", ex.Message);
+            Assert.Equal("Phone number is not valid (Parameter 'preferredPhoneNumber')", ex.Message);
         }
         [Theory]
         [InlineData("0444444444")]
@@ -69,7 +69,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         public void RequiresPostalAddress(string value)
         {
             var ex = Assert.Throws<ArgumentException>(() => new CustomerContact("Jane Doe", "0412341234", "0856785678", value));
-            Assert.Equal("Postal address is required\r\nParameter name: postalAddress", ex.Message);
+            Assert.Equal("Postal address is required (Parameter 'postalAddress')", ex.Message);
         }
     }
 }
