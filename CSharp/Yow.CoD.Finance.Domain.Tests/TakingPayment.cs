@@ -60,7 +60,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         public void ThrowsInvalidArgEx()
         {
             Assert.IsAssignableFrom<ArgumentException>(Caught);
-            Assert.Equal("Transaction date can not be prior to loan creation\r\nParameter name: command", Caught.Message);
+            Assert.Equal("Transaction date can not be prior to loan creation (Parameter 'command')", Caught.Message);
         }
     }
 
@@ -78,7 +78,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         public void ThrowsInvalidArgEx()
         {
             Assert.IsAssignableFrom<ArgumentException>(Caught);
-            Assert.Equal("Transaction amount must be positive\r\nParameter name: command", Caught.Message);
+            Assert.Equal("Transaction amount must be positive (Parameter 'command')", Caught.Message);
         }
     }
 
@@ -96,7 +96,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         public void ThrowsInvalidArgEx()
         {
             Assert.IsAssignableFrom<ArgumentException>(Caught);
-            Assert.Equal("Transaction amount must be positive\r\nParameter name: command", Caught.Message);
+            Assert.Equal("Transaction amount must be positive (Parameter 'command')", Caught.Message);
         }
     }
 

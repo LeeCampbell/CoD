@@ -1,25 +1,31 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using SqlStreamStore;
+using SqlStreamStore.Streams;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SqlStreamStore;
-using SqlStreamStore.Streams;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
 using Yow.CoD.Finance.Domain.Services;
 
-namespace Yow.CoD.Finance.NancyWebHost.Adapters
+namespace Yow.CoD.Finance.SqlDataAdapter
 {
     public class SqlStreamStoreRepository : IRepository<Loan>
     {
         private const int ReadPageSize = 100;
+        private readonly MsSqlStreamStoreSettings settings;
+
+        public SqlStreamStoreRepository(string connectionString)
+        {
+            settings = new MsSqlStreamStoreSettings(connectionString);
+        }
 
         public async Task<Loan> Get(Guid id)
         {
             var loan = new Loan(id);
             var streamId = GetStreamId(id);
-            var eventStore = new MsSqlStreamStore(new MsSqlStreamStoreSettings("myconnectionString"));
+            var eventStore = new MsSqlStreamStore(settings);
 
             var position = 0;
             ReadStreamPage page;
@@ -41,9 +47,10 @@ namespace Yow.CoD.Finance.NancyWebHost.Adapters
             var streamId = GetStreamId(loan.Id);
             var events = loan.GetUncommittedEvents();
             var expectedVersion = loan.Version - events.Length;
-            var eventStore = new MsSqlStreamStore(new MsSqlStreamStoreSettings("myconnectionString"));
+            var eventStore = new MsSqlStreamStore(settings);
             var messages = events.Select(Serialize).ToArray();
-            await eventStore.AppendToStream(streamId, expectedVersion, messages);
+            await eventStore.AppendToStream(streamId, expectedVersion == 0 ? ExpectedVersion.NoStream : expectedVersion, messages);
+
             loan.ClearUncommittedEvents();
         }
 

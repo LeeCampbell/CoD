@@ -1,4 +1,4 @@
-﻿namespace Yow.CoD.Finance.NancyWebHost.Models
+﻿namespace Yow.CoD.Finance.Application.Models
 {
     public sealed class PaymentTakenModel
     {
