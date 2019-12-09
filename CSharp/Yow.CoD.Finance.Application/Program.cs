@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Yow.CoD.Finance.Domain.Model;
+using Yow.CoD.Finance.Domain.Services;
 
 namespace Yow.CoD.Finance.Application
 {
@@ -13,14 +7,13 @@ namespace Yow.CoD.Finance.Application
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            var repo = new InMemoryRepository<Loan>();
+            var createLoanHandler = new CreateLoanCommandHandler(repo);
+            var disbursementHandler = new DisburseLoanFundsCommandHandler(repo);
+            var takePaymentHandler = new TakePaymentCommandHandler(repo);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            var server = new Server(createLoanHandler, disbursementHandler, takePaymentHandler);
+            server.Serve();
+        }
     }
 }
