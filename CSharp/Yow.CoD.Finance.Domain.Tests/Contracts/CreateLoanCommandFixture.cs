@@ -48,7 +48,7 @@ namespace Yow.CoD.Finance.Domain.Tests.Contracts
         {
             var ex = Assert.Throws<ArgumentException>(() => new CreateLoanCommand(ValidCommandId,
                                                           ValidAggregateId,
-                                                          default(DateTimeOffset), 
+                                                          default, 
                                                           ValidCustomerContact,
                                                           ValidBankAccount,
                                                           ValidPaymentPlan,

@@ -44,9 +44,9 @@ namespace Yow.CoD.Finance.Application
             {
                 try
                 {
-                    logger.LogDebug("Handling command {0}", command);
+                    logger.LogDebug("Handling command {0}...", command);
                     var receipt = source.Handle(command);
-                    logger.LogDebug("Handled command {0}", command);
+                    logger.LogDebug("Handled command {0}.", command);
                     return receipt;
                 }
                 catch (System.Exception)

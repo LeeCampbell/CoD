@@ -13,8 +13,7 @@ namespace Yow.CoD.Finance.Domain.Tests
         
         public Task<T> Get(Guid id)
         {
-            T item;
-            if (!_items.TryGetValue(id, out item))
+            if (!_items.TryGetValue(id, out T item))
             {
                 item = (T)Activator.CreateInstance(typeof(T), id);
                 _items[id] = item;
