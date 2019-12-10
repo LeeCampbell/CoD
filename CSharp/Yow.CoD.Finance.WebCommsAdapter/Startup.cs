@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Yow.CoD.Finance.Application
+namespace Yow.CoD.Finance.WebCommsAdapter
 {
     public class Startup
     {

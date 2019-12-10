@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Yow.CoD.Finance.Application.Models;
+using Yow.CoD.Finance.WebCommsAdapter.Models;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Services;
 
-namespace Yow.CoD.Finance.Application.Controllers
+namespace Yow.CoD.Finance.WebCommsAdapter.Controllers
 {
     [Route("Loan")]
     [ApiController]

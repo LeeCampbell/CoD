@@ -40,5 +40,10 @@ namespace Yow.CoD.Finance.Domain.Contracts
         public decimal Amount { get; }
 
         public Duration Term { get; }
+
+        public override string ToString()
+        {
+            return $"CreateLoanCommand{{ CreatedOn:'{CreatedOn}', Amount:'{Amount}', Term:{Term}}}";
+        }
     }
 }

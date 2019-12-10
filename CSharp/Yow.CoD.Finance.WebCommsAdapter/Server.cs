@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Services;
 
-namespace Yow.CoD.Finance.Application
+namespace Yow.CoD.Finance.WebCommsAdapter
 {
     public class Server
     {
@@ -34,7 +34,8 @@ namespace Yow.CoD.Finance.Application
                     serviceCollection.TryAddSingleton(this.disbursementHandler);
                     serviceCollection.TryAddSingleton(this.takePaymentHandler);
                 })
-                .Build().Run();
+                .Build()
+                .Run();
         }
     }
 }

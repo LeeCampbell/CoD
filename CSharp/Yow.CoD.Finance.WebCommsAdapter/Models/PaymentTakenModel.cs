@@ -1,4 +1,4 @@
-﻿namespace Yow.CoD.Finance.Application.Models
+﻿namespace Yow.CoD.Finance.WebCommsAdapter.Models
 {
     public sealed class PaymentTakenModel
     {
