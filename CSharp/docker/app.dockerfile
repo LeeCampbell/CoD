@@ -18,7 +18,7 @@ COPY ./Yow.CoD.Finance.SqlDataAdapter ./Yow.CoD.Finance.SqlDataAdapter
 COPY ./Yow.CoD.Finance.WebCommsAdapter ./Yow.CoD.Finance.WebCommsAdapter
 RUN dotnet build --no-restore --configuration Release
 RUN dotnet test --no-build --no-restore --configuration Release
-RUN dotnet publish --no-build --configuration Release --output ./deploy
+RUN dotnet publish --no-build --configuration Release --output ./deploy --self-contained
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 COPY --from=builder /home/netsdk/deploy/ ./

@@ -1,3 +1,5 @@
 .vs
 deploy
 packages
+bin
+obj

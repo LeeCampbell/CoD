@@ -10,5 +10,4 @@
     <ProjectReference Include="..\Yow.CoD.Finance.WebCommsAdapter\Yow.CoD.Finance.WebCommsAdapter.csproj" />
   </ItemGroup>
 
-
 </Project>
