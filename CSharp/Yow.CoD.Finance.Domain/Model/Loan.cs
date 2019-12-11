@@ -40,7 +40,7 @@ namespace Yow.CoD.Finance.Domain.Model
 
         public void DisburseFunds(DisburseLoanFundsCommand command)
         {
-            if (_disbursedOn != default(DateTimeOffset)) throw new InvalidOperationException("Funds are already disbursed.");
+            if (_disbursedOn != default) throw new InvalidOperationException("Funds are already disbursed.");
 
             var disburseToAccount = new Contracts.BankAccount(_bankAccount.Bsb, _bankAccount.AccountNumber);
             AddEvent(new LoanDisbursedFundsEvent(command.TransactionDate, -_loanAmount, disburseToAccount));

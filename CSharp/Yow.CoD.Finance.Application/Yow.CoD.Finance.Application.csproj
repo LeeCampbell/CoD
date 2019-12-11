@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Yow.CoD.Finance.Domain\Yow.CoD.Finance.Domain.csproj" />
     <ProjectReference Include="..\Yow.CoD.Finance.SqlDataAdapter\Yow.CoD.Finance.SqlDataAdapter.csproj" />
+    <ProjectReference Include="..\Yow.CoD.Finance.WebCommsAdapter\Yow.CoD.Finance.WebCommsAdapter.csproj" />
   </ItemGroup>
-
 
 </Project>

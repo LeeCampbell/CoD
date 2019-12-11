@@ -10,5 +10,10 @@ namespace Yow.CoD.Finance.Domain.Contracts
 
         public int Length { get; }
         public DurationUnit Unit { get; }
+
+        public override string ToString()
+        {
+            return $"{{ Unit:'{Unit}', Length:'{Length}'}}";
+        }
     }
 }
