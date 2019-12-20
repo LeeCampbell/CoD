@@ -8,7 +8,7 @@ import java.util.*;
 public abstract class AggregateRoot {
 
     private final UUID id;
-    private final List<DomainEvent> uncommittedEvents = new ArrayList<DomainEvent>();
+    private final List<DomainEvent> uncommittedEvents = new ArrayList<>();
     private int version;
 
     protected AggregateRoot(UUID id) {
@@ -28,14 +28,9 @@ public abstract class AggregateRoot {
             Method handler = getMethod(payload);
             handler.setAccessible(true);
 			handler.invoke(this, payload);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-        }
-        
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
         version++;
     }
 

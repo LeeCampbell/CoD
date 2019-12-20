@@ -8,7 +8,6 @@ import com.leecampbell.cod.web.SparkServer;
 
 public class App {
     public static void main(String[] args) {
-        //Repository repository = new FakeRepository();
         Repository repository = new PostgresqlRepository("jdbc:postgresql://cod-database:5432/postgres?user=postgres&password=mysecretpassword");
         CreateLoanCommandHandler createLoanCommandHandler = new CreateLoanCommandHandler(repository);
 

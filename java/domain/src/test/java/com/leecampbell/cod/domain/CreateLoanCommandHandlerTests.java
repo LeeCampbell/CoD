@@ -30,7 +30,7 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
     private static final Duration validTerm = new Duration(12, DurationUnit.Month);
 
     public CreateLoanCommandHandlerTests() {
-        super((repo) -> new CreateLoanCommandHandler(repo));
+        super(CreateLoanCommandHandler::new);
     }
 
     @DataPoints("validDurations")
@@ -41,7 +41,7 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Theory
     public void loanCreatedEventIsRaised(@FromDataPoints("validDurations") Duration term) {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(() -> createLoan(term));
         then((cmd, raisedEvents) -> {
             LoanCreatedEvent actual = (LoanCreatedEvent) raisedEvents.get(0);
@@ -54,7 +54,7 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Test
     public void loanCustomerContactChangedEventRaised() {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(this::createLoan);
         then((cmd, raisedEvents) -> {
             LoanCustomerContactChangedEvent actual = (LoanCustomerContactChangedEvent) raisedEvents.get(1);
@@ -67,7 +67,7 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Test
     public void loanBankAccountChangedEventRaised() {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(this::createLoan);
         then((cmd, raisedEvents) -> {
             LoanBankAccountChangedEvent actual = (LoanBankAccountChangedEvent) raisedEvents.get(2);
@@ -78,7 +78,7 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Test
     public void receiptIsReturned() {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(this::createLoan);
         assertEquals(getCommand().getAggregateId(), getReceipt().getAggregateId());
         assertEquals(3, getReceipt().getVersion());
@@ -86,11 +86,9 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Test
     public void subsequentCallsToCreateThrows() {
-        given(() -> Arrays.asList(createdLoan(validAggregateId)));
-        when(() -> createLoan());
-        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> {
-            assertEquals("Loan already created.", ex.getMessage());
-        });
+        given(() -> Collections.singletonList(createdLoan(validAggregateId)));
+        when(this::createLoan);
+        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> assertEquals("Loan already created.", ex.getMessage()));
     }
 
     //TODO: Move to an AggregateRootBase test? -LC
@@ -113,11 +111,9 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Theory
     public void creatingLoanRejectsAmountValuesBelow50Above2000(@FromDataPoints("invalidAmounts") BigDecimal amount) {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(() -> createLoan(amount));
-        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> {
-            assertEquals("Only loan amounts between $50.00 and $2000.00 are supported.", ex.getMessage());
-        });
+        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> assertEquals("Only loan amounts between $50.00 and $2000.00 are supported.", ex.getMessage()));
     }
 
     @DataPoints("overlimitDurations")
@@ -126,20 +122,16 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Theory
     public void rejectCreatingLoansOver2years(@FromDataPoints("overlimitDurations") Duration term) {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(() -> createLoan(term));
-        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> {
-            assertEquals("Only loan terms up to 2 years are supported.", ex.getMessage());
-        });
+        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> assertEquals("Only loan terms up to 2 years are supported.", ex.getMessage()));
     }
 
     @Test
     public void rejectCreatingLoansWithUnknownDuration() {
-        given(() -> Collections.emptyList());
+        given(Collections::emptyList);
         when(() -> createLoan(new Duration(1, DurationUnit.None)));
-        thenThrew(IllegalArgumentException.class, (cmd, ex) -> {
-            assertEquals("Unsupported duration", ex.getMessage());
-        });
+        thenThrew(IllegalArgumentException.class, (cmd, ex) -> assertEquals("Unsupported duration", ex.getMessage()));
     }
 
     private CreateLoanCommand createLoan() {

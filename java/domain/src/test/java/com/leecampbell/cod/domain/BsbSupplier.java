@@ -12,7 +12,7 @@ public final class BsbSupplier extends ParameterSupplier {
     }
     @Override
     public List<PotentialAssignment> getValueSources(ParameterSignature signature) {
-        ArrayList<PotentialAssignment> result = new ArrayList<PotentialAssignment>();
+        ArrayList<PotentialAssignment> result = new ArrayList<>();
         result.add(PotentialAssignment.forValue("066000", new Pair<>("066000", "066-000")));
         result.add(PotentialAssignment.forValue("123456", new Pair<>("123456", "123-456")));
         result.add(PotentialAssignment.forValue("066-000", new Pair<>("066-000", "066-000")));

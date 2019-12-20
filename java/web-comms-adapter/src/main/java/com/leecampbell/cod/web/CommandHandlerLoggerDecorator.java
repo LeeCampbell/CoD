@@ -2,7 +2,7 @@ package com.leecampbell.cod.web;
 
 import com.leecampbell.cod.domain.services.CommandHandler;
 import com.leecampbell.cod.domain.contracts.DomainCommand;
-import com.leecampbell.cod.domain.contracts.Receipt;;
+import com.leecampbell.cod.domain.contracts.Receipt;
 
 /**
  * CommandHandlerLoggerDecorator<T> implements CommandHandler<T>

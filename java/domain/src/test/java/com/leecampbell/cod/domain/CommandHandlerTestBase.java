@@ -49,7 +49,7 @@ public abstract class CommandHandlerTestBase<TCommand extends DomainCommand> {
     protected void then(BiConsumer<TCommand, List<DomainEvent>> assertion) {
         assertNull(caughtException);
 
-        List<DomainEvent> raisedEvents = repository.CommitedEvents();
+        List<DomainEvent> raisedEvents = repository.CommittedEvents();
         assertion.accept(command, raisedEvents);
     }
     

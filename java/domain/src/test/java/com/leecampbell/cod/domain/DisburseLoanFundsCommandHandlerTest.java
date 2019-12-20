@@ -23,7 +23,7 @@ public final class DisburseLoanFundsCommandHandlerTest extends CommandHandlerTes
     private final String bankAccountNumber = "12345678";
 
     public DisburseLoanFundsCommandHandlerTest() {
-        super((repo) -> new DisburseLoanFundsCommandHandler(repo));
+        super(DisburseLoanFundsCommandHandler::new);
     }
 
     @Test
@@ -54,9 +54,7 @@ public final class DisburseLoanFundsCommandHandlerTest extends CommandHandlerTes
         UUID loanId = UUID.randomUUID();
         given(() -> loanDisbursed(loanId));
         when(() -> disburseFunds(loanId));
-        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> {
-            assertEquals("Funds are already disbursed.", ex.getMessage());
-        });
+        thenThrew(UnsupportedOperationException.class, (cmd, ex) -> assertEquals("Funds are already disbursed.", ex.getMessage()));
     }
 
     private List<EventEnvelope> loanCreated(UUID aggregateId) {
