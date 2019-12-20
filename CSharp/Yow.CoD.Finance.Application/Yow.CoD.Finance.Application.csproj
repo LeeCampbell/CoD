@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Yow.CoD.Finance.Domain\Yow.CoD.Finance.Domain.csproj" />
     <ProjectReference Include="..\Yow.CoD.Finance.SqlDataAdapter\Yow.CoD.Finance.SqlDataAdapter.csproj" />
     <ProjectReference Include="..\Yow.CoD.Finance.WebCommsAdapter\Yow.CoD.Finance.WebCommsAdapter.csproj" />
