@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'org.postgresql:postgresql:42.2.5'
+}

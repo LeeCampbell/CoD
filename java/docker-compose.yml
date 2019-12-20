@@ -1,5 +1,11 @@
 version: '3'
 services:
+  cod-database:
+    container_name: cod-database
+    image: cod-database
+    build:
+      context: .
+      dockerfile: docker/db.dockerfile
   cod-application:
     container_name: cod-application
     image: cod-application

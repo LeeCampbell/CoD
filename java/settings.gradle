@@ -11,3 +11,5 @@ rootProject.name = 'CoD'
 include 'domain'
 include 'web-comms-adapter'
 include 'app'
+include 'pg-data-adapter'
+
