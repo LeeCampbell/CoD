@@ -9,6 +9,7 @@ plugins {
 dependencies {
     implementation project(':domain')
     implementation project(':web-comms-adapter')
+    implementation project(':pg-data-adapter')
 }
 
 application {

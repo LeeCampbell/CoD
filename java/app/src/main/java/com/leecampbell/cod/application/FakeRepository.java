@@ -10,7 +10,7 @@ import com.leecampbell.cod.domain.model.Loan;
 import com.leecampbell.cod.domain.services.*;
 
 final class FakeRepository implements Repository {
-    private final ArrayList<DomainEvent> commitedEvents = new ArrayList<DomainEvent>();
+    private final ArrayList<DomainEvent> committedEvents = new ArrayList<DomainEvent>();
 
     public Loan get(UUID id) {
         return new Loan(id);
@@ -18,7 +18,7 @@ final class FakeRepository implements Repository {
 
     public void save(Loan item) {
         List<DomainEvent> temp = Arrays.asList(item.getUncommittedEvents());
-        commitedEvents.addAll(temp);
+        committedEvents.addAll(temp);
 
         item.clearUncommittedEvents();
     }
