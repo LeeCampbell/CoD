@@ -4,6 +4,7 @@ using SqlStreamStore.Streams;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
@@ -52,6 +53,12 @@ namespace Yow.CoD.Finance.SqlDataAdapter
             await eventStore.AppendToStream(streamId, expectedVersion == 0 ? ExpectedVersion.NoStream : expectedVersion, messages);
 
             loan.ClearUncommittedEvents();
+        }
+
+        public async Task Ping(CancellationToken cancellationToken = default)
+        {
+            var eventStore = new MsSqlStreamStore(settings);
+            await eventStore.CheckSchema(cancellationToken);
         }
 
         private static string GetStreamId(Guid loanId)
