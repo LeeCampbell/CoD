@@ -17,7 +17,7 @@ public class StubRepository implements Repository {
         }
     }
     
-    public List<DomainEvent> CommitedEvents() {
+    public List<DomainEvent> CommittedEvents() {
         return Collections.unmodifiableList(committedEvents);
     }
 
@@ -39,9 +39,7 @@ public class StubRepository implements Repository {
 
     public void save(Loan item) {
         DomainEvent[] events = item.getUncommittedEvents();
-        for (DomainEvent event : events) {
-            committedEvents.add(event);
-        }
+        committedEvents.addAll(Arrays.asList(events));
         item.clearUncommittedEvents();
     }
 }

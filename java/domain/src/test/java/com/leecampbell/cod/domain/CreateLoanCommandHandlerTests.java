@@ -86,7 +86,7 @@ public final class CreateLoanCommandHandlerTests extends CommandHandlerTestBase<
 
     @Test
     public void subsequentCallsToCreateThrows() {
-        given(() -> Arrays.asList(createdLoan(validAggregateId)));
+        given(() -> Collections.singletonList(createdLoan(validAggregateId)));
         when(this::createLoan);
         thenThrew(UnsupportedOperationException.class, (cmd, ex) -> assertEquals("Loan already created.", ex.getMessage()));
     }
