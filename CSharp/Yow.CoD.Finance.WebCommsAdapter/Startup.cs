@@ -35,6 +35,7 @@ namespace Yow.CoD.Finance.WebCommsAdapter
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
         }

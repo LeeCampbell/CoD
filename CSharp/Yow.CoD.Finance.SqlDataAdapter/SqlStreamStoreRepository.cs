@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using SqlStreamStore;
+﻿using SqlStreamStore;
 using SqlStreamStore.Streams;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Model;
@@ -54,6 +55,12 @@ namespace Yow.CoD.Finance.SqlDataAdapter
             loan.ClearUncommittedEvents();
         }
 
+        public async Task Ping(CancellationToken cancellationToken = default)
+        {
+            var eventStore = new MsSqlStreamStore(settings);
+            await eventStore.CheckSchema(cancellationToken);
+        }
+
         private static string GetStreamId(Guid loanId)
         {
             return $"Loan-{loanId}";
@@ -65,19 +72,19 @@ namespace Yow.CoD.Finance.SqlDataAdapter
             {
                 {"ClrType", evt.GetType().AssemblyQualifiedName}
             };
-            var headerJson = JsonConvert.SerializeObject(headers); ;
-            var bodyJson = JsonConvert.SerializeObject(evt);
+            var headerJson = JsonSerializer.Serialize(headers);
+            var bodyJson = JsonSerializer.Serialize(evt);
             var msg = new NewStreamMessage(Guid.NewGuid(), evt.GetType().Name, bodyJson, headerJson);
             return msg;
         }
 
         private static async Task<Event> Deserialize(StreamMessage streamMessage)
         {
-            var headers = JsonConvert.DeserializeObject<Dictionary<string, string>>(streamMessage.JsonMetadata);
+            var headers = JsonSerializer.Deserialize<Dictionary<string, string>>(streamMessage.JsonMetadata);
             var assemblyQualifiedTypeName = headers["ClrType"];
             var clrType = Type.GetType(assemblyQualifiedTypeName, true);
             var jsonBody = await streamMessage.GetJsonData();
-            var payload = (Event)JsonConvert.DeserializeObject(jsonBody, clrType);
+            var payload = (Event)JsonSerializer.Deserialize(jsonBody, clrType);
             return payload;
         }
     }

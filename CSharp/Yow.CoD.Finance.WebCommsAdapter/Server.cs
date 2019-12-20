@@ -3,19 +3,28 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Yow.CoD.Finance.Domain.Contracts;
 using Yow.CoD.Finance.Domain.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Yow.CoD.Finance.WebCommsAdapter
 {
     public class Server
     {
+        private readonly IHealthCheck healthCheck;
         private readonly IHandler<CreateLoanCommand, Receipt> createLoanHandler;
         private readonly IHandler<DisburseLoanFundsCommand, Receipt> disbursementHandler;
         private readonly IHandler<TakePaymentCommand, TransactionReceipt> takePaymentHandler;
 
-        public Server(IHandler<CreateLoanCommand, Receipt> createLoanHandler,
+        public Server(
+            IHealthCheck healthCheck,
+            IHandler<CreateLoanCommand, Receipt> createLoanHandler,
             IHandler<DisburseLoanFundsCommand, Receipt> disbursementHandler,
             IHandler<TakePaymentCommand, TransactionReceipt> takePaymentHandler)
         {
+            this.healthCheck = healthCheck;
             this.createLoanHandler = createLoanHandler;
             this.disbursementHandler = disbursementHandler;
             this.takePaymentHandler = takePaymentHandler;
@@ -28,11 +37,14 @@ namespace Yow.CoD.Finance.WebCommsAdapter
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .ConfigureServices(serviceCollection =>
+                .ConfigureServices(services =>
                 {
-                    serviceCollection.TryAddSingleton(this.createLoanHandler);
-                    serviceCollection.TryAddSingleton(this.disbursementHandler);
-                    serviceCollection.TryAddSingleton(this.takePaymentHandler);
+                    services.TryAddSingleton(this.createLoanHandler);
+                    services.TryAddSingleton(this.disbursementHandler);
+                    services.TryAddSingleton(this.takePaymentHandler);
+
+                    services.AddHealthChecks()
+                            .AddCheck("db", healthCheck);
                 })
                 .Build()
                 .Run();

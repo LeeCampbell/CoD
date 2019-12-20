@@ -14,7 +14,7 @@ namespace Yow.CoD.Finance.Application
             var disbursementHandler = new DisburseLoanFundsCommandHandler(repo).WithLogging();
             var takePaymentHandler = new TakePaymentCommandHandler(repo).WithLogging();
 
-            var server = new Server(createLoanHandler, disbursementHandler, takePaymentHandler);
+            var server = new Server(new RepositoryHealthCheck(repo), createLoanHandler, disbursementHandler, takePaymentHandler);
             server.Serve();
         }
     }

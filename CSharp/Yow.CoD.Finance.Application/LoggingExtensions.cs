@@ -40,13 +40,13 @@ namespace Yow.CoD.Finance.Application
                 this.logger = logger;
             }
 
-            public Task<TReceipt> Handle(TCommand command)
+            public async Task<TReceipt> Handle(TCommand command)
             {
                 try
                 {
                     logger.LogDebug("Handling command {0}...", command);
-                    var receipt = source.Handle(command);
-                    logger.LogDebug("Handled command {0}.", command);
+                    var receipt = await source.Handle(command);
+                    logger.LogDebug("Handled command {0} for aggregate {1} version {2}.", command.CommandId, receipt.AggregateId, receipt.Version);
                     return receipt;
                 }
                 catch (System.Exception)
