@@ -1,6 +1,5 @@
 package com.leecampbell.cod.data;
 
-import com.leecampbell.cod.domain.contracts.DomainEvent;
 import com.leecampbell.cod.domain.model.Loan;
 import com.leecampbell.cod.domain.services.Repository;
 

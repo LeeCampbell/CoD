@@ -4,11 +4,11 @@ import java.util.*;
 
 import com.leecampbell.cod.domain.contracts.*;
 import com.leecampbell.cod.domain.model.Loan;
-import com.leecampbell.cod.domain.services.Repository;;
+import com.leecampbell.cod.domain.services.Repository;
 
 public class StubRepository implements Repository {
     private final HashMap<UUID, Loan> items = new HashMap<>();
-    private final ArrayList<EventEnvelope> storedEvents = new ArrayList<EventEnvelope>();
+    private final ArrayList<EventEnvelope> storedEvents = new ArrayList<>();
     private final ArrayList<DomainEvent> committedEvents = new ArrayList<>();
 
     public void Load(Iterable<EventEnvelope> events){

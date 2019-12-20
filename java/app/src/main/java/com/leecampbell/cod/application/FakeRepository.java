@@ -10,7 +10,7 @@ import com.leecampbell.cod.domain.model.Loan;
 import com.leecampbell.cod.domain.services.*;
 
 final class FakeRepository implements Repository {
-    private final ArrayList<DomainEvent> committedEvents = new ArrayList<DomainEvent>();
+    private final ArrayList<DomainEvent> committedEvents = new ArrayList<>();
 
     public Loan get(UUID id) {
         return new Loan(id);

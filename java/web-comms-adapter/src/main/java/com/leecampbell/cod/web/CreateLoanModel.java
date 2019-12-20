@@ -19,8 +19,7 @@ public final class CreateLoanModel {
                 postalAddress);
         BankAccount account = new BankAccount(bankBsb, bankAccount);
         Duration duration = new Duration(12, DurationUnit.Month);
-        CreateLoanCommand command = new CreateLoanCommand(UUID.randomUUID(), UUID.randomUUID(), OffsetDateTime.now(),
+        return new CreateLoanCommand(UUID.randomUUID(), UUID.randomUUID(), OffsetDateTime.now(),
                 customerContact, account, PaymentPlan.Weekly, loanAmount, duration);
-        return command;
     }
 }
