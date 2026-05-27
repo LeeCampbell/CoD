@@ -1,0 +1,17 @@
+{
+  "name": "@cod/app",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@cod/domain": "1.0.0",
+    "@cod/web-comms-adapter": "1.0.0",
+    "@cod/pg-data-adapter": "1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.0"
+  }
+}

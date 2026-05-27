@@ -1,0 +1,15 @@
+{
+  "name": "@cod/domain-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@cod/domain": "1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.0"
+  }
+}
