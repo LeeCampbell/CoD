@@ -270,6 +270,7 @@ build
 
 # TypeScript
 dist/
+*.tsbuildinfo
 
 # Project
 claude-review.md
