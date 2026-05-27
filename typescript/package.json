@@ -1,0 +1,16 @@
+{
+  "name": "cod-typescript",
+  "private": true,
+  "workspaces": [
+    "packages/domain",
+    "packages/domain-tests",
+    "packages/pg-data-adapter",
+    "packages/web-comms-adapter",
+    "packages/app"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "node --test packages/domain-tests/dist/**/*.test.js"
+  }
+}
