@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../domain" },
+    { "path": "../web-comms-adapter" },
+    { "path": "../pg-data-adapter" }
+  ]
+}

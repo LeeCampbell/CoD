@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "references": [
+    { "path": "packages/domain" },
+    { "path": "packages/domain-tests" },
+    { "path": "packages/pg-data-adapter" },
+    { "path": "packages/web-comms-adapter" },
+    { "path": "packages/app" }
+  ],
+  "files": []
+}
