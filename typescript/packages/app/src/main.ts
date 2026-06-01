@@ -22,20 +22,47 @@ const takePaymentHandler = withLogging(
   new TakePaymentCommandHandler(repository),
 );
 
-const server = new Server(
-  () => repository.healthCheck(),
-  createLoanHandler,
-  disburseLoanFundsHandler,
-  takePaymentHandler,
-);
-server.serve();
-
-async function shutdown() {
-  console.log("Shutting down...");
-  await server.close();
-  await repository.close();
-  process.exit(0);
+async function waitForDatabase(
+  maxRetries = 10,
+  delayMs = 2000,
+): Promise<void> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    if (await repository.healthCheck()) {
+      console.log(`Database ready (attempt ${attempt})`);
+      return;
+    }
+    console.log(
+      `Database not ready (attempt ${attempt}/${maxRetries}), retrying in ${delayMs}ms...`,
+    );
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+  }
+  throw new Error("Database not available after maximum retries");
 }
 
-process.on("SIGTERM", shutdown);
-process.on("SIGINT", shutdown);
+async function main() {
+  await waitForDatabase();
+
+  const server = new Server(
+    () => repository.healthCheck(),
+    createLoanHandler,
+    disburseLoanFundsHandler,
+    takePaymentHandler,
+  );
+  server.serve();
+
+  async function shutdown() {
+    console.log("Shutting down...");
+    await server.close();
+    await repository.close();
+    console.log("Shut down.");
+    process.exit(0);
+  }
+
+  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", shutdown);
+}
+
+main().catch((err) => {
+  console.error("Failed to start:", err);
+  process.exit(1);
+});
