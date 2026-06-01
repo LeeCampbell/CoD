@@ -71,6 +71,18 @@ export class EventAppender {
       await client.query("COMMIT");
     } catch (e) {
       await client.query("ROLLBACK");
+      if (
+        e instanceof Error &&
+        "code" in e &&
+        (e as { code: string }).code === "23505"
+      ) {
+        throw new WrongExpectedVersionError(
+          streamType,
+          streamId,
+          expectedVersion,
+          expectedVersion,
+        );
+      }
       throw e;
     } finally {
       client.release();

@@ -1,4 +1,3 @@
-version: '3'
 services:
   cod-database:
     container_name: cod-ts-database

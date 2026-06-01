@@ -213,7 +213,7 @@ describe("Creating a loan over $2000", () => {
     assert.ok(spec.caught instanceof UnsupportedLoanAmountError);
     assert.strictEqual(
       spec.caught!.message,
-      "Only loan amounts between $50.00 and $2000.00 are supported.",
+      "Only loan amounts between $50.00 and $2000.00 are supported. Got $2001.00.",
     );
   });
 });
@@ -226,7 +226,7 @@ describe("Creating a loan under $50", () => {
     assert.ok(spec.caught instanceof UnsupportedLoanAmountError);
     assert.strictEqual(
       spec.caught!.message,
-      "Only loan amounts between $50.00 and $2000.00 are supported.",
+      "Only loan amounts between $50.00 and $2000.00 are supported. Got $49.00.",
     );
   });
 });

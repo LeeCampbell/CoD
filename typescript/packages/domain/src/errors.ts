@@ -43,7 +43,7 @@ export class LoanAlreadyCreatedError extends Error {
 export class UnsupportedLoanAmountError extends Error {
   constructor(amount: number) {
     super(
-      `Only loan amounts between $50.00 and $2000.00 are supported.`,
+      `Only loan amounts between $50.00 and $2000.00 are supported. Got $${amount.toFixed(2)}.`,
     );
     this.name = "UnsupportedLoanAmountError";
   }
