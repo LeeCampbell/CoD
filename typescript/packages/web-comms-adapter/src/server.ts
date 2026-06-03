@@ -16,14 +16,15 @@ import {
   UnsupportedLoanTermError,
   FundsAlreadyDisbursedError,
 } from "@cod/domain";
+import { Router, json, text, jsonBody } from "./router.js";
 import { toCreateLoanCommand } from "./create-loan-model.js";
+import type { CreateLoanModelInput } from "./create-loan-model.js";
 import type { LoanCreatedModel } from "./loan-created-model.js";
 import { toDisburseLoanFundsCommand } from "./disburse-loan-model.js";
 import type { DisbursedModel } from "./disbursed-model.js";
 import { toTakePaymentCommand } from "./loan-payment-model.js";
+import type { LoanPaymentModelInput } from "./loan-payment-model.js";
 import type { PaymentTakenModel } from "./payment-taken-model.js";
-
-const MAX_BODY_SIZE = 1024 * 1024; // 1 MB
 
 const DOMAIN_ERRORS = [
   InvalidBankAccountError,
@@ -40,10 +41,7 @@ const DOMAIN_ERRORS = [
 export type HealthCheck = () => Promise<boolean>;
 
 export class Server {
-  readonly #createLoanHandler: Handler<CreateLoanCommand, Receipt>;
-  readonly #disburseLoanFundsHandler: Handler<DisburseLoanFundsCommand, Receipt>;
-  readonly #takePaymentHandler: Handler<TakePaymentCommand, TransactionReceipt>;
-  readonly #healthCheck: HealthCheck;
+  readonly #router: Router;
   readonly #port: number;
   #server?: http.Server;
 
@@ -54,80 +52,46 @@ export class Server {
     takePaymentHandler: Handler<TakePaymentCommand, TransactionReceipt>,
     port = 4567,
   ) {
-    this.#healthCheck = healthCheck;
-    this.#createLoanHandler = createLoanHandler;
-    this.#disburseLoanFundsHandler = disburseLoanFundsHandler;
-    this.#takePaymentHandler = takePaymentHandler;
     this.#port = port;
+    this.#router = new Router();
+
+    this.#router.get("/", () => text(200, "YOW 2017 - Cost Of a Dependency"));
+
+    this.#router.get("/health", async () => {
+      const healthy = await healthCheck();
+      return text(healthy ? 200 : 503, healthy ? "Healthy" : "Unhealthy");
+    });
+
+    this.#router.post("/Loan", async (req) => {
+      const model = await jsonBody<CreateLoanModelInput>(req);
+      const command = toCreateLoanCommand(model);
+      const receipt = await createLoanHandler.handle(command);
+      return json<LoanCreatedModel>(200, { loanId: receipt.aggregateId });
+    });
+
+    this.#router.post("/Loan/:id/disburse", async (req) => {
+      const command = toDisburseLoanFundsCommand(req.params.id);
+      const receipt = await disburseLoanFundsHandler.handle(command);
+      return json<DisbursedModel>(200, {
+        aggregateId: receipt.aggregateId,
+        version: receipt.version,
+      });
+    });
+
+    this.#router.post("/Loan/:id", async (req) => {
+      const model = await jsonBody<LoanPaymentModelInput>(req);
+      const command = toTakePaymentCommand(req.params.id, model);
+      const receipt = await takePaymentHandler.handle(command);
+      return json<PaymentTakenModel>(200, {
+        transactionId: receipt.transactionId,
+      });
+    });
   }
 
   serve(): void {
     this.#server = http.createServer(async (req, res) => {
       try {
-        const url = new URL(req.url ?? "/", `http://${req.headers.host}`);
-        const method = req.method ?? "GET";
-
-        if (method === "GET" && url.pathname === "/") {
-          res.writeHead(200, { "Content-Type": "text/plain" });
-          res.end("YOW 2017 - Cost Of a Dependency");
-          return;
-        }
-
-        if (method === "GET" && url.pathname === "/health") {
-          const healthy = await this.#healthCheck();
-          const status = healthy ? 200 : 503;
-          res.writeHead(status, { "Content-Type": "text/plain" });
-          res.end(healthy ? "Healthy" : "Unhealthy");
-          return;
-        }
-
-        if (method === "POST" && url.pathname === "/Loan") {
-          const body = await readBody(req);
-          const model = JSON.parse(body);
-          const command = toCreateLoanCommand(model);
-          const receipt = await this.#createLoanHandler.handle(command);
-          const response: LoanCreatedModel = {
-            loanId: receipt.aggregateId,
-          };
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify(response));
-          return;
-        }
-
-        const disburseMatch = url.pathname.match(
-          /^\/Loan\/([^/]+)\/disburse$/,
-        );
-        if (method === "POST" && disburseMatch) {
-          const loanId = disburseMatch[1];
-          const command = toDisburseLoanFundsCommand(loanId);
-          const receipt =
-            await this.#disburseLoanFundsHandler.handle(command);
-          const response: DisbursedModel = {
-            aggregateId: receipt.aggregateId,
-            version: receipt.version,
-          };
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify(response));
-          return;
-        }
-
-        const paymentMatch = url.pathname.match(/^\/Loan\/([^/]+)$/);
-        if (method === "POST" && paymentMatch) {
-          const loanId = paymentMatch[1];
-          const body = await readBody(req);
-          const model = JSON.parse(body);
-          const command = toTakePaymentCommand(loanId, model);
-          const receipt = await this.#takePaymentHandler.handle(command);
-          const response: PaymentTakenModel = {
-            transactionId: receipt.transactionId,
-          };
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify(response));
-          return;
-        }
-
-        res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end("Not Found");
+        await this.#router.handle(req, res);
       } catch (e) {
         console.error("Request error:", e);
         if (isDomainError(e)) {
@@ -158,22 +122,4 @@ export class Server {
 
 function isDomainError(e: unknown): boolean {
   return DOMAIN_ERRORS.some((errorClass) => e instanceof errorClass);
-}
-
-function readBody(req: http.IncomingMessage): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    let size = 0;
-    req.on("data", (chunk: Buffer) => {
-      size += chunk.length;
-      if (size > MAX_BODY_SIZE) {
-        req.destroy();
-        reject(new Error("Request body too large"));
-        return;
-      }
-      chunks.push(chunk);
-    });
-    req.on("end", () => resolve(Buffer.concat(chunks).toString()));
-    req.on("error", reject);
-  });
 }
